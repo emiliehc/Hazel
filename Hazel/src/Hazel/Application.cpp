@@ -4,7 +4,6 @@
 #include "Events/ApplicationEvent.h"
 #include "glad/glad.h"
 #include "Log.h"
-#include "GLFW/glfw3.h"
 
 namespace Hazel
 {

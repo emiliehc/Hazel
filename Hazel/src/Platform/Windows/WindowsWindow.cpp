@@ -1,9 +1,6 @@
 #include "hzpch.h"
 #include "WindowsWindow.h"
 
-#include "Platform/Windows/WindowsWindow.h"
-
-
 #include "glad/glad.h"
 
 #include "Hazel/Events/ApplicationEvent.h"
@@ -15,7 +12,7 @@ namespace Hazel
 {
     static bool s_GLFWInitialized = false;
 
-    static void GLFWErrorCallback(int error, const char* description)
+    static void GLFWErrorCallback(const int error, const char* description)
     {
         HZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
@@ -104,6 +101,13 @@ namespace Hazel
             }
             default: break;
             }
+        });
+
+        glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+        {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            KeyTypedEvent e(keycode);
+            data.EventCallback(e);
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
