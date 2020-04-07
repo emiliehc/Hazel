@@ -16,6 +16,7 @@ namespace Hazel
     protected:
         KeyEvent(int keycode) : m_KeyCode(keycode)
         {
+            //HZ_CORE_TRACE(keycode);
         }
 
         int m_KeyCode;

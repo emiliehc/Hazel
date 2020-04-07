@@ -3,6 +3,7 @@
 
 #include "Events/ApplicationEvent.h"
 #include "glad/glad.h"
+#include "Input.h"
 #include "Log.h"
 
 namespace Hazel
@@ -20,14 +21,17 @@ namespace Hazel
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
     }
 
-    void Application::OnEvent(Event& e) {
+    void Application::OnEvent(Event& e)
+    {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
         //HZ_CORE_TRACE("{0}", e);
 
-        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+        {
             (*--it)->OnEvent(e);
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 break;
             }
         }
@@ -64,6 +68,9 @@ namespace Hazel
             {
                 layer->OnUpdate();
             }
+
+            //auto [x, y] = Input::GetMousePosition();
+            //HZ_CORE_TRACE("{0}, {1}", x, y);
 
             m_Window->OnUpdate();
         }
