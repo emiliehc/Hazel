@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
 
@@ -37,6 +38,7 @@ namespace Hazel
         bool OnWindowClosed(WindowCloseEvent& e);
 
         std::unique_ptr<Window> m_Window;
+        ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
         static Application* s_Instance;

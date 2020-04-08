@@ -83,7 +83,7 @@ namespace Hazel
         {
         }
 
-        float m_Button;
+        int m_Button;
     };
 
     class HAZEL_API MouseButtonPressedEvent : public MouseButtonEvent
