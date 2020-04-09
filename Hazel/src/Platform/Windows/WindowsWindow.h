@@ -5,6 +5,9 @@
 
 namespace Hazel
 {
+    class OpenGLContext;
+    class GraphicsContext;
+
     class WindowsWindow : public Window
     {
     public:
@@ -41,7 +44,8 @@ namespace Hazel
         virtual void Init(const WindowProps& props);
         virtual void Shutdown();
     private:
-        GLFWwindow* m_Window;
+        GLFWwindow* m_Window{};
+        GraphicsContext* m_Context{};
 
         struct WindowData
         {
