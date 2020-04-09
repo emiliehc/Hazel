@@ -45,9 +45,7 @@ namespace Hazel
         unsigned int Offset;
         bool Normalized;
 
-        BufferElement()
-        {
-        }
+        BufferElement() = default;
 
         BufferElement(ShaderDataType type, const std::string& name, bool normalized = false) : Name(name), Type(type),
                                                                                                Size(ShaderDataTypeSize(
@@ -79,9 +77,7 @@ namespace Hazel
     class BufferLayout
     {
     public:
-        BufferLayout()
-        {
-        }
+        BufferLayout() = default;
 
         BufferLayout(const std::initializer_list<BufferElement>& elements) : m_Elements(elements)
         {

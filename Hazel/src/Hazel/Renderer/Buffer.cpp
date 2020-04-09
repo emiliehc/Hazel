@@ -27,7 +27,8 @@ namespace Hazel
 
     IndexBuffer* IndexBuffer::Create(unsigned int* indices, unsigned count)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::GetAPI())
+        {
         case RendererAPI::None:
         {
             HZ_CORE_ASSERT(false, "Renderer API none is not supported!");
