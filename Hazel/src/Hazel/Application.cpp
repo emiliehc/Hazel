@@ -2,8 +2,8 @@
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
-#include "glad/glad.h"
 #include "Log.h"
+#include "Renderer/Renderer.h"
 
 namespace Hazel
 {
@@ -21,10 +21,10 @@ namespace Hazel
 
         m_ImGuiLayer = new ImGuiLayer;
         PushOverlay(m_ImGuiLayer);
-        
+
         m_VertexArray.reset(VertexArray::Create());
 
-        
+
         float vertices[3 * 7] = {
             -0.5, -0.5, 0, 0.8, 0.2, 0.8, 1,
             0.5, -0.5, 0, 0.2, 0.3, 0.8, 1,
@@ -48,7 +48,7 @@ namespace Hazel
         std::shared_ptr<IndexBuffer> indexBuffer;
         indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
         m_VertexArray->SetIndexBuffer(indexBuffer);
-        
+
 
         float squareVertices[3 * 4] = {
             -0.75, -0.75, 0,
@@ -184,20 +184,19 @@ namespace Hazel
     {
         while (m_Running)
         {
-            glClearColor(0.1f, 0.1f, 0.1f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
+            RenderCommand::Clear();
 
-            m_BlueShader->Bind();
-            m_SquareVA->Bind();
-            glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+            Renderer::BeginScene();
             
+            m_BlueShader->Bind();
+            Renderer::Submit(m_SquareVA);
 
             m_Shader->Bind();
-            m_VertexArray->Bind();
+            Renderer::Submit(m_VertexArray);
 
-            glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-            
+            Renderer::EndScene();
+
 
             for (Layer* layer : m_LayerStack)
             {
