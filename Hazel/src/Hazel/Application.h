@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
+#include "Renderer/OrthographicCamera.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
 #include "Window.h"
@@ -48,6 +49,8 @@ namespace Hazel
         std::shared_ptr<Shader> m_BlueShader;
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<VertexArray> m_SquareVA;
+
+        OrthographicCamera m_Camera;
 
         static Application* s_Instance;
     };

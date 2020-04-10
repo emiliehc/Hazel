@@ -1,6 +1,7 @@
 #include "hzpch.h"
 #include "Shader.h"
-#include "glad/glad.h"
+#include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel
 {
@@ -128,5 +129,15 @@ namespace Hazel
     void Shader::Unbind() const
     {
         glUseProgram(0);
+    }
+
+    /**
+     * BIND BEFORE UPLOADING
+     */
+    void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
+    {
+        int location = glGetUniformLocation(m_RendererID, name.c_str());
+        //HZ_CORE_ASSERT(location != -1, "Uniform does not exist!");
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 }
