@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Core.h"
+#include "Core/Timestep.h"
 #include "ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
-#include "Renderer/OrthographicCamera.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
 #include "Window.h"
@@ -13,7 +12,7 @@ namespace Hazel
     class Layer;
     class WindowCloseEvent;
 
-    class HAZEL_API Application
+    class Application
     {
     public:
         Application();
@@ -45,12 +44,7 @@ namespace Hazel
         bool m_Running = true;
         LayerStack m_LayerStack;
 
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<Shader> m_BlueShader;
-        std::shared_ptr<VertexArray> m_VertexArray;
-        std::shared_ptr<VertexArray> m_SquareVA;
-
-        OrthographicCamera m_Camera;
+        float m_LastFrameTime = 0.0f;
 
         static Application* s_Instance;
     };
