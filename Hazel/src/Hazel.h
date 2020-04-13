@@ -19,6 +19,7 @@
 #include "Hazel/Renderer/RendererAPI.h"
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Core/Timestep.h"
+#include "Hazel/Renderer/Texture.h"
 
 
 // ---Entry Point-----------
