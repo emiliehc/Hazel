@@ -184,6 +184,9 @@ public:
         m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 
         m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+        m_ChernoLogoTexture = Hazel::Texture2D::Create("assets/textures/ChernoLogo.png");
+
+
         std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
         std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
     }
@@ -245,6 +248,8 @@ public:
 
         m_Texture->Bind();
         Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        m_ChernoLogoTexture->Bind();
+        Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // Triangle
         //std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
@@ -271,7 +276,7 @@ private:
     Hazel::Ref<Hazel::VertexArray> m_VertexArray;
     Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 
-    Hazel::Ref<Hazel::Texture2D> m_Texture;
+    Hazel::Ref<Hazel::Texture2D> m_Texture, m_ChernoLogoTexture;
 
     Hazel::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;

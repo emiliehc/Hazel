@@ -3,9 +3,8 @@
 
 #include "Events/ApplicationEvent.h"
 #include "GLFW/glfw3.h"
-#include "glm/gtc/matrix_transform.hpp"
 #include "Log.h"
-#include "Renderer/RenderCommand.h"
+#include "Renderer/Renderer.h"
 
 namespace Hazel
 {
@@ -21,6 +20,8 @@ namespace Hazel
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
         m_Window->SetVSync(true);
+
+        Renderer::Init();
 
         m_ImGuiLayer = new ImGuiLayer;
         PushOverlay(m_ImGuiLayer);

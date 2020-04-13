@@ -10,6 +10,7 @@ namespace Hazel
         void Clear() override;
 
         void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
+        void Init() override;
     };
 }
 
