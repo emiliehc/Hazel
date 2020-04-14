@@ -2,6 +2,8 @@
 #include "glm/mat4x4.hpp"
 #include "Hazel/Renderer/Shader.h"
 
+// TODO : remove
+typedef unsigned int GLenum;
 
 namespace Hazel
 {
@@ -9,6 +11,7 @@ namespace Hazel
     {
     public:
         OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+        OpenGLShader(const std::string& filepath);
         ~OpenGLShader() override;
 
         void Bind() const override;
@@ -24,5 +27,9 @@ namespace Hazel
 
     private:
         unsigned int m_RendererID;
+
+        std::string ReadFile(const std::string& filepath);
+        std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+        void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
     };
 }
