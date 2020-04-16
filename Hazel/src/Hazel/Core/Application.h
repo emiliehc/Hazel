@@ -1,17 +1,15 @@
 #pragma once
 
-#include "Core/Timestep.h"
-#include "ImGui/ImGuiLayer.h"
+#include "Hazel/Core/Timestep.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
-#include "Renderer/Shader.h"
-#include "Renderer/VertexArray.h"
+#include "Hazel/Renderer/Shader.h"
+#include "Hazel/Renderer/VertexArray.h"
 #include "Window.h"
+#include "Hazel/Events/ApplicationEvent.h"
 
 namespace Hazel
 {
-    class Layer;
-    class WindowCloseEvent;
-
     class Application
     {
     public:

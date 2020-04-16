@@ -1,7 +1,8 @@
 #pragma once
 #include "hzpch.h"
 
-#include "Core/Timestep.h"
+#include "Hazel/Core/Core.h"
+#include "Hazel/Core/Timestep.h"
 
 namespace Hazel
 {

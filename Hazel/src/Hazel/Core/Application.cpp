@@ -1,10 +1,10 @@
 #include "hzpch.h"
 #include "Application.h"
 
-#include "Events/ApplicationEvent.h"
+#include "Hazel/Events/ApplicationEvent.h"
 #include "GLFW/glfw3.h"
 #include "Log.h"
-#include "Renderer/Renderer.h"
+#include "Hazel/Renderer/Renderer.h"
 
 namespace Hazel
 {
