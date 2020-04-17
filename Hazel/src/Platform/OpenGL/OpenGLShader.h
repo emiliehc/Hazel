@@ -36,5 +36,9 @@ namespace Hazel
         std::string ReadFile(const std::string& filepath);
         std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
         void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+    public:
+        void SetMat4(const std::string& name, const glm::mat4& values) override;
+        void SetFloat4(const std::string& name, const glm::vec4& values) override;
+        void SetFloat3(const std::string& name, const glm::vec3& values) override;
     };
 }
