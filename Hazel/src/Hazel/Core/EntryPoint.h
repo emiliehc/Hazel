@@ -1,5 +1,6 @@
 // ReSharper disable All
 #pragma once
+
 #include "Application.h"
 #include "Log.h"
 

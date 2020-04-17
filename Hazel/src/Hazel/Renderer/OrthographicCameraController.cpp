@@ -60,6 +60,7 @@ namespace Hazel
             {
                 m_CameraRotation += 360.0f;
             }
+
             m_Camera.SetRotation(m_CameraRotation);
         }
 

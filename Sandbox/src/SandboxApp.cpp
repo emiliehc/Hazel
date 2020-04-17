@@ -1,4 +1,5 @@
 #include "Hazel.h"
+#include "Hazel/Core/EntryPoint.h"
 
 #include "imgui/imgui.h"
 
@@ -7,6 +8,7 @@
 
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Sandbox2D.h"
 
 
 class ExampleLayer : public Hazel::Layer
@@ -14,7 +16,7 @@ class ExampleLayer : public Hazel::Layer
 public:
     ExampleLayer() : Layer("Example"), m_CameraController(1280.0f / 720.0f, true), m_SquarePosition(0.0f)
     {
-        m_VertexArray.reset(Hazel::VertexArray::Create());
+        m_VertexArray = Hazel::VertexArray::Create();
 
 
         float vertices[3 * 7] = {
@@ -50,7 +52,7 @@ public:
         };
 
 
-        m_SquareVA.reset(Hazel::VertexArray::Create());
+        m_SquareVA = Hazel::VertexArray::Create();
         Hazel::Ref<Hazel::VertexBuffer> squareVB;
         squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
@@ -152,7 +154,7 @@ public:
 
         m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
         m_ChernoLogoTexture = Hazel::Texture2D::Create("assets/textures/ChernoLogo.png");
-
+         
 
         std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
         std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
@@ -232,7 +234,8 @@ class Sandbox : public Hazel::Application
 public:
     Sandbox()
     {
-        PushLayer(new ExampleLayer);
+        //PushLayer(new ExampleLayer);
+        PushLayer(new Sandbox2D);
     }
 
     ~Sandbox() override = default;

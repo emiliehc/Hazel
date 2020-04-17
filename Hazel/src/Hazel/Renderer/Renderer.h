@@ -10,6 +10,8 @@ namespace Hazel
     class Renderer
     {
     public:
+        Renderer() = delete;
+
         static void Init();
         static void OnWindowResize(unsigned width, unsigned height);
 

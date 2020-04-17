@@ -21,8 +21,4 @@
 #include "Hazel/Core/Timestep.h"
 #include "Hazel/Renderer/Texture.h"
 #include "Hazel/Renderer/OrthographicCameraController.h"
-
-
-// ---Entry Point-----------
-#include "Hazel/Core/EntryPoint.h"
-// -------------------------
+#include "Hazel/Renderer/Renderer2D.h"
