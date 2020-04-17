@@ -156,8 +156,8 @@ public:
         m_ChernoLogoTexture = Hazel::Texture2D::Create("assets/textures/ChernoLogo.png");
          
 
-        std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
-        std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+        textureShader->Bind();
+        textureShader->SetInt("u_Texture", 0);
     }
 
     void OnUpdate(Hazel::Timestep ts) override

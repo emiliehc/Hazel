@@ -187,6 +187,11 @@ namespace Hazel
         UploadUniformFloat3(name, values);
     }
 
+    void OpenGLShader::SetInt(const std::string& name, int value)
+    {
+        UploadUniformInt(name, value);
+    }
+
     void OpenGLShader::Bind() const
     {
         glUseProgram(m_RendererID);

@@ -40,5 +40,6 @@ namespace Hazel
         void SetMat4(const std::string& name, const glm::mat4& values) override;
         void SetFloat4(const std::string& name, const glm::vec4& values) override;
         void SetFloat3(const std::string& name, const glm::vec3& values) override;
+        void SetInt(const std::string& name, int value) override;
     };
 }
