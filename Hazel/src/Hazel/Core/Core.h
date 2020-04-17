@@ -4,9 +4,9 @@
 
 // Platform detection using predefined macros
 #ifdef _WIN32
-	/* Windows x64/x86 */
+/* Windows x64/x86 */
 #ifdef _WIN64
-	/* Windows x64  */
+/* Windows x64  */
 #define HZ_PLATFORM_WINDOWS
 #else
 	/* Windows x86 */
@@ -29,9 +29,9 @@
 #else
 #error "Unknown Apple platform!"
 #endif
- /* We also have to check __ANDROID__ before __linux__
-  * since android is based on the linux kernel
-  * it has __linux__ defined */
+/* We also have to check __ANDROID__ before __linux__
+ * since android is based on the linux kernel
+ * it has __linux__ defined */
 #elif defined(__ANDROID__)
 #define HZ_PLATFORM_ANDROID
 #error "Android is not supported!"
@@ -75,12 +75,23 @@
 
 #define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-namespace Hazel {
+namespace Hazel
+{
+    template <typename T>
+    using Scope = std::unique_ptr<T>;
 
-	template<typename T>
-	using Scope = std::unique_ptr<T>;
+    template <typename T>
+    using Ref = std::shared_ptr<T>;
 
-	template<typename T>
-	using Ref = std::shared_ptr<T>;
+    template <typename T, typename ... Args>
+    constexpr Scope<T> CreateScope(Args&&... args)
+    {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
 
+    template <typename T, typename ... Args>
+    constexpr Ref<T> CreateRef(Args&&... args)
+    {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
 }

@@ -11,6 +11,8 @@ namespace Hazel
         virtual unsigned int GetWidth() = 0;
         virtual unsigned int GetHeight() = 0;
 
+        virtual void SetData(void* data, unsigned size) = 0;
+
         virtual void Bind(unsigned int slot = 0) const = 0;
     };
 
@@ -18,6 +20,7 @@ namespace Hazel
     {
     public:
         static Ref<Texture2D> Create(const std::string& path);
+        static Ref<Texture2D> Create(unsigned width, unsigned height);
     };
 
 }
