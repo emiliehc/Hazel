@@ -5,6 +5,7 @@
 #include "OrthographicCamera.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Renderer2D.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace Hazel
 {
@@ -12,8 +13,15 @@ namespace Hazel
 
     void Renderer::Init()
     {
+        HZ_PROFILE_FUNCTION();
+
         RenderCommand::Init();
         Renderer2D::Init();
+    }
+
+    void Renderer::Shutdown()
+    {
+        Renderer2D::ShutDown();
     }
 
     void Renderer::OnWindowResize(unsigned width, unsigned height)

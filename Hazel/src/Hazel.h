@@ -22,3 +22,4 @@
 #include "Hazel/Renderer/Texture.h"
 #include "Hazel/Renderer/OrthographicCameraController.h"
 #include "Hazel/Renderer/Renderer2D.h"
+#include "Hazel/Debug/Instrumentor.h"

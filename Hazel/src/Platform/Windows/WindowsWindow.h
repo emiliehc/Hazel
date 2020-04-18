@@ -46,6 +46,7 @@ namespace Hazel
     private:
         GLFWwindow* m_Window{};
         GraphicsContext* m_Context{};
+        int m_GLFWWindowCount;
 
         struct WindowData
         {

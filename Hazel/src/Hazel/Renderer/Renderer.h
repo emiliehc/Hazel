@@ -13,6 +13,8 @@ namespace Hazel
         Renderer() = delete;
 
         static void Init();
+        static void Shutdown();
+
         static void OnWindowResize(unsigned width, unsigned height);
 
         static void BeginScene(OrthographicCamera& camera);
