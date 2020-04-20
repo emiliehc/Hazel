@@ -25,8 +25,7 @@ public:
             0, 0.5, 0, 0.8, 0.8, 0.2, 1
         };
 
-        Hazel::Ref<Hazel::VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+        Hazel::Ref<Hazel::VertexBuffer> vertexBuffer = Hazel::VertexBuffer::Create(vertices, sizeof(vertices));
 
 
         Hazel::BufferLayout layout = {
@@ -39,8 +38,8 @@ public:
 
 
         unsigned int indices[3] = {0, 1, 2};
-        Hazel::Ref<Hazel::IndexBuffer> indexBuffer;
-        indexBuffer.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+        Hazel::Ref<Hazel::IndexBuffer> indexBuffer = Hazel::IndexBuffer::Create(
+            indices, sizeof(indices) / sizeof(unsigned int));
         m_VertexArray->SetIndexBuffer(indexBuffer);
 
 
@@ -53,8 +52,7 @@ public:
 
 
         m_SquareVA = Hazel::VertexArray::Create();
-        Hazel::Ref<Hazel::VertexBuffer> squareVB;
-        squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+        Hazel::Ref<Hazel::VertexBuffer> squareVB = Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
         squareVB->SetLayout({
             {Hazel::ShaderDataType::Float3, "a_Position"},
@@ -66,8 +64,8 @@ public:
             0, 1, 2,
             2, 3, 0
         };
-        Hazel::Ref<Hazel::IndexBuffer> squareIB;
-        squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareVertices) / sizeof(unsigned int)));
+        Hazel::Ref<Hazel::IndexBuffer> squareIB = Hazel::IndexBuffer::Create(
+            squareIndices, sizeof(squareVertices) / sizeof(unsigned int));
         m_SquareVA->SetIndexBuffer(squareIB);
 
         std::string vertexSrc =
@@ -154,7 +152,7 @@ public:
 
         m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
         m_ChernoLogoTexture = Hazel::Texture2D::Create("assets/textures/ChernoLogo.png");
-         
+
 
         textureShader->Bind();
         textureShader->SetInt("u_Texture", 0);

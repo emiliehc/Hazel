@@ -1307,7 +1307,6 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
-    <ClInclude Include="src\Hazel\Renderer\Primitives2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">

@@ -7,10 +7,9 @@
 
 namespace Hazel
 {
-    VertexBuffer* VertexBuffer::Create(float* vertices, unsigned size)
+    Ref<VertexBuffer> VertexBuffer::Create(unsigned size)
     {
-        switch (Renderer::GetAPI())
-        {
+        switch (Renderer::GetAPI()) {
         case RendererAPI::API::None:
         {
             HZ_CORE_ASSERT(false, "Renderer API none is not supported!");
@@ -18,14 +17,14 @@ namespace Hazel
         }
         case RendererAPI::API::OpenGL:
         {
-            return new OpenGLVertexBuffer(vertices, size);
+            return std::make_shared<OpenGLVertexBuffer>(size);
         }
         }
         HZ_CORE_ASSERT(false, "Unknown renderer API!");
         return nullptr;
     }
 
-    IndexBuffer* IndexBuffer::Create(unsigned int* indices, unsigned count)
+    Ref<VertexBuffer> VertexBuffer::Create(float* vertices, unsigned size)
     {
         switch (Renderer::GetAPI())
         {
@@ -36,7 +35,25 @@ namespace Hazel
         }
         case RendererAPI::API::OpenGL:
         {
-            return new OpenGLIndexBuffer(indices, count);
+            return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+        }
+        }
+        HZ_CORE_ASSERT(false, "Unknown renderer API!");
+        return nullptr;
+    }
+        
+    Ref<IndexBuffer> IndexBuffer::Create(unsigned int* indices, unsigned count)
+    {
+        switch (Renderer::GetAPI())
+        {
+        case RendererAPI::API::None:
+        {
+            HZ_CORE_ASSERT(false, "Renderer API none is not supported!");
+            return nullptr;
+        }
+        case RendererAPI::API::OpenGL:
+        {
+            return std::make_shared<OpenGLIndexBuffer>(indices, count);
         }
         }
         HZ_CORE_ASSERT(false, "Unknown renderer API!");
