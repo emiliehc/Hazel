@@ -24,6 +24,7 @@ namespace Hazel
         void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
         void UploadUniformFloat(const std::string& name, float value);
         void UploadUniformInt(const std::string& name, int value);
+        void UploadUniformIntArray(const std::string& name, int* values, unsigned count);
 
         const std::string& GetName() const override
         {
@@ -41,6 +42,7 @@ namespace Hazel
         void SetFloat4(const std::string& name, const glm::vec4& values) override;
         void SetFloat3(const std::string& name, const glm::vec3& values) override;
         void SetInt(const std::string& name, int value) override;
+        void SetIntArray(const std::string& name, int* values, unsigned count) override;
         void SetFloat(const std::string& name, float value) override;
     };
 }
