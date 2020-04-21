@@ -87,11 +87,17 @@ project "Hazel"
         defines "HZ_RELEASE"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }
 
     filter "configurations:Dist"
         defines "HZ_DIST"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }
 
 project "Sandbox"
     location "Sandbox"
@@ -136,8 +142,14 @@ project "Sandbox"
         defines "HZ_RELEASE"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }
 
     filter "configurations:Dist"
         defines "HZ_DIST"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }

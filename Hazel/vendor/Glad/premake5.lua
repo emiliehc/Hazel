@@ -27,4 +27,13 @@ project "Glad"
     filter "configurations:Release"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }    
+    filter "configurations:Dist"
+        runtime "Release"
+        optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/LTCG", "/GL"
+        }
 
