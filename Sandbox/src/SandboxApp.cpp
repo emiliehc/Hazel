@@ -9,6 +9,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Sandbox2D.h"
+#include "Hazel/ECS/GameObject.h"
 
 
 class ExampleLayer : public Hazel::Layer
@@ -16,6 +17,8 @@ class ExampleLayer : public Hazel::Layer
 public:
     ExampleLayer() : Layer("Example"), m_CameraController(1280.0f / 720.0f, true), m_SquarePosition(0.0f)
     {
+
+
         m_VertexArray = Hazel::VertexArray::Create();
 
 
@@ -232,6 +235,9 @@ class Sandbox : public Hazel::Application
 public:
     Sandbox()
     {
+        Hazel::DisplayableGameObject obj;
+        HZ_TRACE(obj);
+
         PushLayer(new Sandbox2D);
         //PushLayer(new ExampleLayer);
     }
