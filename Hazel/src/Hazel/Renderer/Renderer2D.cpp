@@ -24,9 +24,9 @@ namespace Hazel
 
     struct Renderer2DData
     {
-        const unsigned MaxQuads = 10000;
-        const unsigned MaxVertices = MaxQuads * 4;
-        const unsigned MaxIndices = MaxQuads * 6;
+        static const unsigned MaxQuads = 20000;
+        static const unsigned MaxVertices = MaxQuads * 4;
+        static const unsigned MaxIndices = MaxQuads * 6;
         static const unsigned MaxTextureSlots = 32; // TODO : renderer capabilities
 
         Ref<VertexArray> QuadVertexArray;
@@ -42,6 +42,8 @@ namespace Hazel
         unsigned TextureSlotIndex = 1; // 0 = white texture
 
         glm::vec4 QuadVertexPositions[4];
+
+        Renderer2D::Statistics Stats;
     };
 
     static Renderer2DData s_Data;
@@ -62,13 +64,13 @@ namespace Hazel
         });
         s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
-        s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
+        s_Data.QuadVertexBufferBase = new QuadVertex[Renderer2DData::MaxVertices];
 
 
-        auto* quadIndices = new unsigned[s_Data.MaxIndices];
+        auto* quadIndices = new unsigned[Renderer2DData::MaxIndices];
 
         unsigned offset = 0;
-        for (unsigned i = 0; i < s_Data.MaxIndices; i += 6)
+        for (unsigned i = 0; i < Renderer2DData::MaxIndices; i += 6)
         {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
@@ -148,6 +150,18 @@ namespace Hazel
         }
 
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+         
+        s_Data.Stats.DrawCalls++;
+    }
+
+    void Renderer2D::FlushAndReset()
+    {
+        EndScene();
+
+        s_Data.QuadIndexCount = 0;
+        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+        s_Data.TextureSlotIndex = 1;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -160,10 +174,15 @@ namespace Hazel
     {
         HZ_PROFILE_FUNCTION();
 
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
+            FlushAndReset();
+        }
+
         constexpr float texIndex = 0.0f;
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-            * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        glm::mat4 transform = translate(glm::mat4(1.0f), position)
+            * scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;
@@ -194,6 +213,8 @@ namespace Hazel
         s_Data.QuadVertexBufferPtr++;
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
     }
 
 
@@ -207,7 +228,9 @@ namespace Hazel
                               float tilingFactor, const glm::vec4& tintColor)
     {
         HZ_PROFILE_FUNCTION();
-
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+            FlushAndReset();
+        }
         constexpr glm::vec4 color(1.0f);
 
         float texIndex = 0;
@@ -228,8 +251,8 @@ namespace Hazel
             s_Data.TextureSlotIndex++;
         }
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform = translate(glm::mat4(1.0f), position)
+            * scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = tintColor;
@@ -260,6 +283,8 @@ namespace Hazel
         s_Data.QuadVertexBufferPtr++;
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
     }
 
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -272,12 +297,14 @@ namespace Hazel
                                      const glm::vec4& color)
     {
         HZ_PROFILE_FUNCTION();
-
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+            FlushAndReset();
+        }
         constexpr float texIndex = 0.0f;
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
-            * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        glm::mat4 transform = translate(glm::mat4(1.0f), position)
+            * rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+            * scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;
@@ -308,6 +335,8 @@ namespace Hazel
         s_Data.QuadVertexBufferPtr++;
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
     }
 
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -320,7 +349,9 @@ namespace Hazel
                                      const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
     {
         HZ_PROFILE_FUNCTION();
-
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+            FlushAndReset();
+        }
         float texIndex = 0;
 
         for (unsigned i = 1; i < s_Data.TextureSlotIndex; i++)
@@ -339,9 +370,9 @@ namespace Hazel
             s_Data.TextureSlotIndex++;
         }
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
-            * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        glm::mat4 transform = translate(glm::mat4(1.0f), position)
+            * rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+            * scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = tintColor;
@@ -372,5 +403,17 @@ namespace Hazel
         s_Data.QuadVertexBufferPtr++;
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
+    }
+
+    Renderer2D::Statistics Renderer2D::GetStats()
+    {
+        return s_Data.Stats;
+    }
+
+    void Renderer2D::ResetStates()
+    {
+        memset(&s_Data.Stats, 0, sizeof Statistics);
     }
 }
