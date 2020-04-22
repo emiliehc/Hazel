@@ -99,15 +99,6 @@
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h">
       <Filter>src\Hazel\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\ECS\Displayable2D.h">
-      <Filter>src\Hazel\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\ECS\GameObject.h">
-      <Filter>src\Hazel\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\ECS\Printable.h">
-      <Filter>src\Hazel\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h">
       <Filter>src\Hazel\Events</Filter>
     </ClInclude>
@@ -1339,12 +1330,6 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Log.cpp">
       <Filter>src\Hazel\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\ECS\GameObject.cpp">
-      <Filter>src\Hazel\ECS</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\ECS\Printable.cpp">
-      <Filter>src\Hazel\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ImGui\ImGuiBuild.cpp">
       <Filter>src\Hazel\ImGui</Filter>
