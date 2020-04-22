@@ -2,10 +2,10 @@
 
 namespace Hazel
 {
-    class Displayable
+    class Displayable2D
     {
     public:
-        virtual ~Displayable() = default;
+        virtual ~Displayable2D() = default;
         virtual void Render() = 0;
     };
 }

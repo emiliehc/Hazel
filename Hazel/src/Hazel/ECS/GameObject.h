@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Displayable.h"
+#include "Displayable2D.h"
 #include "Printable.h"
+#include "glm/glm.hpp"
 
 namespace Hazel
 {
     class GameObject : public Printable
     {
     public:
-        GameObject();
+        GameObject(const glm::vec3& pos = glm::vec3(1.0f));
 
         virtual ~GameObject()
         {
@@ -18,16 +19,17 @@ namespace Hazel
 
     private:
         std::string m_ID;
+        glm::vec3 m_Pos;
     };
 
-    class DisplayableGameObject : public GameObject, public Displayable
+    class DisplayableGameObject2D : public GameObject, public Displayable2D
     {
     public:
-        DisplayableGameObject() : GameObject()
+        DisplayableGameObject2D(const glm::vec3& pos = glm::vec3(1.0f)) : GameObject(pos)
         {
         }
 
-        ~DisplayableGameObject() override
+        ~DisplayableGameObject2D() override
         {
         }
 

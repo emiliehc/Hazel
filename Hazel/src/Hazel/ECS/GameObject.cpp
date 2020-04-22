@@ -45,7 +45,7 @@ namespace Hazel
         return ss.str();
     }
 
-    GameObject::GameObject() : m_ID(generate_uuid_v4())
+    GameObject::GameObject(const glm::vec3& pos) : m_ID(generate_uuid_v4()), m_Pos(pos)
     {
     }
 

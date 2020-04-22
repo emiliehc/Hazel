@@ -235,7 +235,7 @@ class Sandbox : public Hazel::Application
 public:
     Sandbox()
     {
-        Hazel::DisplayableGameObject obj;
+        Hazel::DisplayableGameObject2D obj;
         HZ_TRACE(obj);
 
         PushLayer(new Sandbox2D);

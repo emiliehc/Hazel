@@ -153,7 +153,7 @@
     <ClInclude Include="src\Hazel\Core\Timestep.h" />
     <ClInclude Include="src\Hazel\Core\Window.h" />
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
-    <ClInclude Include="src\Hazel\ECS\Displayable.h" />
+    <ClInclude Include="src\Hazel\ECS\Displayable2D.h" />
     <ClInclude Include="src\Hazel\ECS\GameObject.h" />
     <ClInclude Include="src\Hazel\ECS\Printable.h" />
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h" />
