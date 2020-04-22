@@ -4,6 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 
+#include "Hazel/ECS/Systems.h"
+
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
 }
@@ -23,6 +25,14 @@ void Sandbox2D::OnDetach()
 void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 {
     HZ_PROFILE_FUNCTION();
+
+    Layer::OnUpdate(ts);
+
+    auto phys = m_ECS.GetSystem<Hazel::PhysicsSystem>();
+
+    Hazel::Entity e = m_ECS.CreateEntity();
+    m_ECS.AddComponent<Hazel::Transform>(e, {{0.0f, 0.0f, 0.0f}, {10.0f, 10.0f}, 0.0f});
+
     {
         HZ_PROFILE_SCOPE("CameraController::OnUpdate");
         m_CameraController.OnUpdate(ts);
