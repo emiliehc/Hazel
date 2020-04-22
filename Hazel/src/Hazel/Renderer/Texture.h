@@ -4,6 +4,8 @@
 
 namespace Hazel
 {
+    class Texture2D;
+
     class Texture {
     public:
         virtual ~Texture() = default;
@@ -14,6 +16,8 @@ namespace Hazel
         virtual void SetData(void* data, unsigned size) = 0;
 
         virtual void Bind(unsigned int slot = 0) const = 0;
+
+        virtual bool operator==(const Texture& other) const = 0;
     };
 
     class Texture2D : public Texture
