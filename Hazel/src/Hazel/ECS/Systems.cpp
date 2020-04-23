@@ -1,9 +1,10 @@
 #include "hzpch.h"
 #include "Systems.h"
+#include "ECSCore.h"
 
 namespace Hazel
 {
-    PhysicsSystem::PhysicsSystem()
+    PhysicsSystem::PhysicsSystem(ECS* ecs) : System(ecs)
     {
     }
 
@@ -12,6 +13,18 @@ namespace Hazel
         for (const Entity e : m_Entities)
         {
             // TODO
+        }
+    }
+
+    RendererSystem::RendererSystem(ECS* ecs) : System(ecs)
+    {
+    }
+
+    void RendererSystem::OnUpdate(Timestep ts)
+    {
+        for (const Entity e : m_Entities) {
+            // render
+            
         }
     }
 }

@@ -5,24 +5,15 @@
 #include <array>
 #include <unordered_map>
 #include <set>
+#include "Systems.h"
 
 #include "Hazel/Core/Timestep.h"
 #include <set>
 
+#include "ECSTypeDefs.h"
+
 namespace Hazel
 {
-    class Timestep;
-    class ECS;
-
-    using Entity = unsigned;
-    constexpr unsigned MAX_ENTITIES = 5000;
-
-    using ComponentType = unsigned char;
-    const unsigned char MAX_COMPONENTS = 32;
-
-    using Signature = std::bitset<MAX_COMPONENTS>;
-
-
     class EntityManager
     {
     public:
@@ -257,29 +248,18 @@ namespace Hazel
         }
     };
 
-    // TODO : wrap the 2d renderer with the system
-
-    class System
-    {
-    public:
-        virtual ~System() = default;
-        virtual void OnUpdate(Timestep ts) = 0;
-    public:
-        std::set<Entity> m_Entities;
-    };
-
     class SystemManager
     {
     public:
         template<typename T>
-        Ref<T> RegisterSystem()
+        Ref<T> RegisterSystem(ECS* ecs)
         {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_Systems.find(typeName) == m_Systems.end(), "Registering system more than once.");
 
             // Create a pointer to the system and return it so it can be used externally
-            auto system = CreateRef<T>();
+            auto system = CreateRef<T>(ecs);
             m_Systems.insert({typeName, system});
             return system;
         }
@@ -355,11 +335,7 @@ namespace Hazel
     class ECS
     {
     public:
-        ECS() : m_ComponentManager(CreateScope<ComponentManager>()),
-                m_EntityManager(CreateScope<EntityManager>()),
-                m_SystemManager(CreateScope<SystemManager>())
-        {
-        }
+        ECS();
 
         Entity CreateEntity()
         {
@@ -414,6 +390,14 @@ namespace Hazel
         }
 
         template<typename T>
+        bool HasComponent(Entity entity)
+        {
+            const auto entitySignature = m_EntityManager->GetSignature(entity);
+            const auto componentType = m_ComponentManager->GetComponentType<T>();
+            return entitySignature.test(componentType);
+        }
+
+        template<typename T>
         ComponentType GetComponentType()
         {
             return m_ComponentManager->GetComponentType<T>();
@@ -423,7 +407,7 @@ namespace Hazel
         template<typename T>
         std::shared_ptr<T> RegisterSystem()
         {
-            return m_SystemManager->RegisterSystem<T>();
+            return m_SystemManager->RegisterSystem<T>(this);
         }
 
         template<typename T>

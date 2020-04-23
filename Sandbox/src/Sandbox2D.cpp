@@ -4,6 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 
+
+#include "Hazel/ECS/Components.h"
 #include "Hazel/ECS/Systems.h"
 
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
@@ -15,6 +17,11 @@ void Sandbox2D::OnAttach()
     HZ_PROFILE_FUNCTION();
 
     m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+
+    Hazel::Entity e = m_ECS.CreateEntity();
+    m_ECS.AddComponent<Hazel::Transform>(e, {{0.0f, 0.0f, 0.0f}, {10.0f, 20.0f}, 0.0f});
+    m_ECS.AddComponent<Hazel::Drawable>(e, {Hazel::PrimitiveGeometryType::Quad});
+    m_ECS.AddComponent<Hazel::Colored>(e, {glm::vec4(1.0f)});
 }
 
 void Sandbox2D::OnDetach()

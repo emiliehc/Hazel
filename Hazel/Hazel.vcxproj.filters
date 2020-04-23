@@ -1320,6 +1320,7 @@
     <ClInclude Include="src\Hazel\ECS\Systems.h" />
     <ClInclude Include="src\Hazel\ECS\Components.h" />
     <ClInclude Include="src\Hazel\ECS\ECSCore.h" />
+    <ClInclude Include="src\Hazel\ECS\ECSTypeDefs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1401,5 +1402,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ECS\Systems.cpp" />
+    <ClCompile Include="src\Hazel\ECS\ECSCore.cpp" />
   </ItemGroup>
 </Project>

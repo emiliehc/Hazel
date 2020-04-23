@@ -32,11 +32,15 @@ namespace Hazel
         Triangle = 0, Quad = 1
     };
 
+    struct Drawable
+    {
+        PrimitiveGeometryType GeometryType;
+    };
+
     struct RigidBody
     {
         glm::vec3 Velocity;
         glm::vec3 Acceleration;
-        PrimitiveGeometryType GeometryType;
         bool Movable;
     };
 }
