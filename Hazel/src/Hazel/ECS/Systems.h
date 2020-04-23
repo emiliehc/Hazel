@@ -23,8 +23,7 @@ namespace Hazel
         ECS* m_ECS;
     };
 
-    class PhysicsSystem : public System
-    {
+    class PhysicsSystem : public System {
     public:
         explicit PhysicsSystem(ECS* ecs);
 
@@ -32,7 +31,6 @@ namespace Hazel
 
         void OnUpdate(Timestep ts) override;
     };
-
 
     // wrapper for the existing 2d renderer
     class RendererSystem : public System

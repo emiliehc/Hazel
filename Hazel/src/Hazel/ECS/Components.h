@@ -23,7 +23,8 @@ namespace Hazel
 
     struct Textured
     {
-        Ref<Texture> Texture;
+        Ref<Texture2D> Texture;
+        float TilingFactor;
     };
 
     // extend this to support n-gons, which are basically Ref<Mesh>es
