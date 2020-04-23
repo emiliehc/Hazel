@@ -20,16 +20,9 @@ void Sandbox2D::OnAttach()
 
     m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
 
-    Hazel::Entity e = m_ECS.CreateEntity();
-    m_ECS.AddComponent<Hazel::Transform>(e, {{0.0f, 0.0f, 0.8f}, {1.0f, 20.0f}, 0.0f});
-    m_ECS.AddComponent<Hazel::Drawable>(e, {Hazel::PrimitiveGeometryType::Quad});
-    m_ECS.AddComponent<Hazel::Colored>(e, {glm::vec4(1.0f)});
+    Hazel::Entity e = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.8f }, { 1.0f, 20.0f }, { glm::vec4(1.0f) });
 
-    Hazel::Entity e1 = m_ECS.CreateEntity();
-    m_ECS.AddComponent<Hazel::Transform>(e1, { {0.0f, 0.0f, 0.9f}, {3.0f, 2.0f}, 0.0f });
-    m_ECS.AddComponent<Hazel::Drawable>(e1, { Hazel::PrimitiveGeometryType::Quad });
-    m_ECS.AddComponent<Hazel::Colored>(e1, { {0.2f, 0.8f, 0.3f, 1.0f} });
-    m_ECS.AddComponent<Hazel::Textured>(e1, { m_CheckerboardTexture, 0.5f });
+    Hazel::Entity e1 = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.9f }, { 3.0f, 2.0f }, m_CheckerboardTexture, 0.5f, { 0.2f, 0.8f, 0.3f, 1.0f });
     s_Ent = e1;
 
 }

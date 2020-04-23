@@ -10,8 +10,12 @@
 
 #include "Hazel/Core/Timestep.h"
 #include <set>
+#include <glm/glm.hpp>
 
+
+#include "Components.h"
 #include "ECSTypeDefs.h"
+#include "Hazel/Renderer/Texture.h"
 
 namespace Hazel
 {
@@ -86,7 +90,7 @@ namespace Hazel
     };
 
 
-    template<typename T>
+    template <typename T>
     class ComponentArray : public IComponentArray
     {
     public:
@@ -163,7 +167,7 @@ namespace Hazel
     class ComponentManager
     {
     public:
-        template<typename T>
+        template <typename T>
         void RegisterComponent()
         {
             const char* typeName = typeid(T).name();
@@ -181,7 +185,7 @@ namespace Hazel
             ++m_NextComponentType;
         }
 
-        template<typename T>
+        template <typename T>
         ComponentType GetComponentType()
         {
             const char* typeName = typeid(T).name();
@@ -193,21 +197,21 @@ namespace Hazel
             return m_ComponentTypes[typeName];
         }
 
-        template<typename T>
+        template <typename T>
         void AddComponent(Entity entity, T component)
         {
             // Add a component to the array for an entity
             GetComponentArray<T>()->InsertData(entity, component);
         }
 
-        template<typename T>
+        template <typename T>
         void RemoveComponent(Entity entity)
         {
             // Remove a component from the array for an entity
             GetComponentArray<T>()->RemoveData(entity);
         }
 
-        template<typename T>
+        template <typename T>
         T& GetComponent(Entity entity)
         {
             // Get a reference to a component from the array for an entity
@@ -237,7 +241,7 @@ namespace Hazel
         ComponentType m_NextComponentType{};
 
         // Convenience function to get the statically casted pointer to the ComponentArray of type T.
-        template<typename T>
+        template <typename T>
         Ref<ComponentArray<T>> GetComponentArray()
         {
             const char* typeName = typeid(T).name();
@@ -252,7 +256,7 @@ namespace Hazel
     class SystemManager
     {
     public:
-        template<typename T>
+        template <typename T>
         Ref<T> RegisterSystem(ECS* ecs)
         {
             const char* typeName = typeid(T).name();
@@ -265,7 +269,7 @@ namespace Hazel
             return system;
         }
 
-        template<typename T>
+        template <typename T>
         void SetSignature(Signature signature)
         {
             const char* typeName = typeid(T).name();
@@ -310,7 +314,7 @@ namespace Hazel
             }
         }
 
-        template<typename T>
+        template <typename T>
         Ref<T> GetSystem()
         {
             const char* typeName = typeid(T).name();
@@ -343,6 +347,100 @@ namespace Hazel
             return m_EntityManager->CreateEntity();
         }
 
+        // ---------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------
+
+        // creating quads
+        // normal quads
+        Entity CreateQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, 0.0f});
+            AddComponent<Colored>(e, {color});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            return e;
+        }
+
+        Entity CreateQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {position, size, 0.0f});
+            AddComponent<Colored>(e, {color});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            return e;
+        }
+
+        Entity CreateQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture,
+                          float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f))
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, 0.0f});
+            AddComponent<Colored>(e, {tintColor});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Textured>(e, {texture, tilingFactor});
+            return e;
+        }
+
+        Entity CreateQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture,
+                          float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f))
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {position, size, 0.0f});
+            AddComponent<Colored>(e, {tintColor});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Textured>(e, {texture, tilingFactor});
+            return e;
+        }
+
+        // rotated quads
+        Entity CreateRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
+                                 const glm::vec4& color)
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, rotation});
+            AddComponent<Colored>(e, {color});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            return e;
+        }
+
+        Entity CreateRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
+                                 const glm::vec4& color)
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {position, size, rotation});
+            AddComponent<Colored>(e, {color});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            return e;
+        }
+
+        Entity CreateRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
+                                 const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
+                                 const glm::vec4& tintColor = glm::vec4(1.0f))
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, rotation});
+            AddComponent<Colored>(e, {tintColor});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Textured>(e, {texture, tilingFactor});
+            return e;
+        }
+
+        Entity CreateRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
+                                 const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
+                                 const glm::vec4& tintColor = glm::vec4(1.0f))
+        {
+            Entity e = CreateEntity();
+            AddComponent<Transform>(e, {position, size, rotation});
+            AddComponent<Colored>(e, {tintColor});
+            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Textured>(e, {texture, tilingFactor});
+            return e;
+        }
+
+        // ---------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------
+
+
         void DestroyEntity(Entity entity)
         {
             m_EntityManager->DestroyEntity(entity);
@@ -354,13 +452,13 @@ namespace Hazel
 
 
         // Component methods
-        template<typename T>
+        template <typename T>
         void RegisterComponent()
         {
             m_ComponentManager->RegisterComponent<T>();
         }
 
-        template<typename T>
+        template <typename T>
         void AddComponent(Entity entity, T component)
         {
             m_ComponentManager->AddComponent<T>(entity, component);
@@ -372,7 +470,7 @@ namespace Hazel
             m_SystemManager->EntitySignatureChanged(entity, signature);
         }
 
-        template<typename T>
+        template <typename T>
         void RemoveComponent(Entity entity)
         {
             m_ComponentManager->RemoveComponent<T>(entity);
@@ -384,13 +482,13 @@ namespace Hazel
             m_SystemManager->EntitySignatureChanged(entity, signature);
         }
 
-        template<typename T>
+        template <typename T>
         T& GetComponent(Entity entity)
         {
             return m_ComponentManager->GetComponent<T>(entity);
         }
 
-        template<typename T>
+        template <typename T>
         bool HasComponent(Entity entity)
         {
             const auto entitySignature = m_EntityManager->GetSignature(entity);
@@ -398,26 +496,26 @@ namespace Hazel
             return entitySignature.test(componentType);
         }
 
-        template<typename T>
+        template <typename T>
         ComponentType GetComponentType()
         {
             return m_ComponentManager->GetComponentType<T>();
         }
 
         // System methods
-        template<typename T>
+        template <typename T>
         std::shared_ptr<T> RegisterSystem()
         {
             return m_SystemManager->RegisterSystem<T>(this);
         }
 
-        template<typename T>
+        template <typename T>
         void SetSystemSignature(Signature signature)
         {
             m_SystemManager->SetSignature<T>(signature);
         }
 
-        template<typename T>
+        template <typename T>
         Ref<T> GetSystem()
         {
             return m_SystemManager->GetSystem<T>();

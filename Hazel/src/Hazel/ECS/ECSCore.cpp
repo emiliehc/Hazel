@@ -22,6 +22,7 @@ namespace Hazel
             signature.set(GetComponentType<Gravity>());
             signature.set(GetComponentType<RigidBody>());
             signature.set(GetComponentType<Transform>());
+            signature.set(GetComponentType<Drawable>());
             SetSystemSignature<PhysicsSystem>(signature);
         }
 
