@@ -17,19 +17,19 @@ namespace Hazel
 
         virtual ~System() = default;
         virtual void OnUpdate(Timestep ts) = 0;
+
+        virtual void OnEntityAdded(Entity e)
+        {
+        }
+
+        virtual void OnEntityRemoved(Entity e)
+        {
+        }
+
     public:
         std::set<Entity> m_Entities;
     protected:
         ECS* m_ECS;
-    };
-
-    class PhysicsSystem : public System {
-    public:
-        explicit PhysicsSystem(ECS* ecs);
-
-        ~PhysicsSystem() override = default;
-
-        void OnUpdate(Timestep ts) override;
     };
 
     // wrapper for the existing 2d renderer

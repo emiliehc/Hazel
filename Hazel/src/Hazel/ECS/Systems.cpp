@@ -7,18 +7,11 @@
 
 namespace Hazel
 {
-    PhysicsSystem::PhysicsSystem(ECS* ecs) : System(ecs)
-    {
-    }
+  
 
-    void PhysicsSystem::OnUpdate(Timestep ts)
-    {
-        for (const Entity e : m_Entities)
-        {
-            // TODO
-        }
-    }
-
+    // -----------------------------------------------------------------
+    // Renderer System
+    // -----------------------------------------------------------------
     RendererSystem::RendererSystem(ECS* ecs) : System(ecs)
     {
     }

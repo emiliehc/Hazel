@@ -44,4 +44,9 @@ namespace Hazel
         glm::vec3 Acceleration;
         bool Movable;
     };
+
+    struct Health
+    {
+        float health = 1.0f;
+    };
 }
