@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="src\GDLayer.h" />
     <ClInclude Include="src\GDSystems.h" />
+    <ClInclude Include="src\GDComponents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GDLayer.cpp" />
