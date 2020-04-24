@@ -42,6 +42,7 @@ namespace Hazel
     {
         glm::vec3 Velocity;
         glm::vec3 Acceleration;
+        float Mass;
         bool Movable;
     };
 

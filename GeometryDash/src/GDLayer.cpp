@@ -1,6 +1,7 @@
 ﻿#include "GDLayer.h"
 
 
+#include "GDComponents.h"
 #include "GDSystems.h"
 #include "Hazel/Renderer/Renderer2D.h"
 #include "Hazel/Renderer/RenderCommand.h"
@@ -12,27 +13,37 @@ namespace GD
     GDLayer::GDLayer() : Layer("MainGame")
     {
         // register additional components
+        m_ECS.RegisterComponent<GDPlayer>();
+        m_ECS.RegisterComponent<GDObject>();
 
         // register additional systems
         auto gameLogicSys = m_ECS.RegisterSystem<GameLogicSystem>();
         {
             Signature signature;
             signature.set(m_ECS.GetComponentType<Transform>());
+            signature.set(m_ECS.GetComponentType<GDObject>());
             m_ECS.SetSystemSignature<GameLogicSystem>(signature);
         }
+        auto camSys = m_ECS.RegisterSystem<CameraSystem>();
 
         // create entities
         // create player
         Entity player = m_ECS.CreateEntity();
-        m_ECS.AddComponent<Transform>(player, {{1.0f, 1.0f, 0.9f}, {1.0f, 1.0f}, 0.0f});
+        m_ECS.AddComponent<Transform>(player, {{0.0f, 100.0f, 0.9f}, {1.0f, 1.0f}, 0.0f});
         m_ECS.AddComponent<Colored>(player, {glm::vec4(1.0f)});
         m_ECS.AddComponent<Drawable>(player, {PrimitiveGeometryType::Quad});
+        m_ECS.AddComponent<GDPlayer>(player, {GDGameMode::Cube, false});
+        m_ECS.AddComponent<Gravity>(player, {{0.0f, -140.0f, 0.0f}});
+        m_ECS.AddComponent<RigidBody>(player, {glm::vec3(0.0f), glm::vec3(0.0f), 1.0f, true});
+        m_ECS.AddComponent<GDObject>(player, {GDObjectType::Player});
         gameLogicSys->SetPlayer(player);
+        camSys->SetPlayer(player);
 
-        m_ECS.CreateQuad({0.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
+        Entity quad = m_ECS.CreateQuad({0.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
+        m_ECS.AddComponent<GDObject>(quad, {GDObjectType::Square});
 
         // init camera
-        m_Camera = &m_ECS.RegisterSystem<CameraSystem>()->GetCamera();
+        m_Camera = &camSys->GetCamera();
     }
 
     GDLayer::~GDLayer()

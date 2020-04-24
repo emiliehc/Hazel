@@ -1,4 +1,7 @@
 #pragma once
+#include "Hazel/ECS/ECSTypeDefs.h"
+
+using namespace Hazel;
 
 namespace GD
 {
@@ -9,4 +12,28 @@ namespace GD
     // by its type, e.g. the move trigger will move the blocks specified by their entity ids
     // by the number of blocks specified in the struct. The time step will be used together
     // with the action time to calculate the amount of movements needed for each frame.
+
+    enum class GDGameMode : unsigned char
+    {
+        Cube = 0
+    };
+
+    struct GDPlayer
+    {
+        GDGameMode GameMode;
+        bool OnTheGround;
+    };
+
+    enum class GDObjectType : unsigned char
+    {
+        Player = 0,
+        Ground = 1,
+        Square = 2
+    };
+
+    struct GDObject
+    {
+        GDObjectType ObjectType;
+        bool Killer = false;
+    };
 }

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Hazel/ECS/Components.h"
 #include "Hazel/ECS/Systems.h"
 #include "Hazel/Renderer/OrthographicCamera.h"
 
@@ -31,9 +32,20 @@ namespace GD
             return m_Camera;
         }
 
+        Entity GetPlayer() const {
+            return m_Player;
+        }
+
+        void SetPlayer(Entity e);
+
     private:
+        // player
+        Entity m_Player;
+        Transform* m_PlayerTransform;
+
+        // camera
         float m_AspectRatio;
-        float m_ZoomLevel = 1.0f;
+        float m_ZoomLevel = 8.0f;
         OrthographicCamera m_Camera;
         bool m_Rotation;
         float m_CameraRotation = 0.0f;
