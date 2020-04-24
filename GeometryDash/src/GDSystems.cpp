@@ -206,13 +206,14 @@ namespace GD
 
             auto& objectProps = m_ECS->GetComponent<GDObject>(e);
             // TODO : change to switch expression
-            if (objectProps.ObjectType == GDObjectType::Square)
+            switch (objectProps.ObjectType)
+            {
+            case GDObjectType::Square:
             {
                 // top
                 float playerBottomToObjectTop = (playerTransform.Position.y - playerTransform.Size.y / 2) - (
                     objectTransform.Position.y + objectTransform.Size.y / 2);
-                if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -playerTransform.Size.y / 2.0f)
-                {
+                if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -playerTransform.Size.y / 2.0f) {
                     playerTransform.Position.y = objectTransform.Position.y + objectTransform.Size.y / 2 +
                         playerTransform.Size.y / 2;
                     playerProps.OnTheGround = true;
@@ -221,8 +222,20 @@ namespace GD
                 }
 
                 // bottom
+                float objectBottomToPlayerTop; // TODO
 
                 // TODO : side
+                break;
+            }
+            case GDObjectType::Ground:
+            {
+                // TODO : only check the top
+                continue;
+            }
+            default:
+            {
+                HZ_ASSERT(false, "Unsupported object type!");
+            }
             }
         }
     }
