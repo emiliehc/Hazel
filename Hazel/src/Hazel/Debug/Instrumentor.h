@@ -107,7 +107,18 @@ namespace Hazel {
 	};
 }
 
+#ifdef HZ_DEBUG
 #define HZ_PROFILE 1
+#endif
+
+#ifdef HZ_RELEASE
+#define HZ_PROFILE 1
+#endif
+
+#ifdef HZ_DIST
+#define HZ_PROFILE 0
+#endif
+
 #if HZ_PROFILE
 #define HZ_PROFILE_BEGIN_SESSION(name, filepath) ::Hazel::Instrumentor::Get().BeginSession(name, filepath)
 #define HZ_PROFILE_END_SESSION() ::Hazel::Instrumentor::Get().EndSession()

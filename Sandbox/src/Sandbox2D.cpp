@@ -4,15 +4,28 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 
+
+#include "Hazel/ECS/Components.h"
+#include "Hazel/ECS/Systems.h"
+
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
+
 }
+
+static Hazel::Entity s_Ent;
 
 void Sandbox2D::OnAttach()
 {
     HZ_PROFILE_FUNCTION();
 
     m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+
+    Hazel::Entity e = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.8f }, { 1.0f, 20.0f }, { glm::vec4(1.0f) });
+
+    Hazel::Entity e1 = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.9f }, { 3.0f, 2.0f }, m_CheckerboardTexture, 0.5f, { 0.2f, 0.8f, 0.3f, 1.0f });
+    s_Ent = e1;
+
 }
 
 void Sandbox2D::OnDetach()
@@ -23,6 +36,12 @@ void Sandbox2D::OnDetach()
 void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 {
     HZ_PROFILE_FUNCTION();
+
+    {
+        auto& transform = m_ECS.GetComponent<Hazel::Transform>(s_Ent);
+        transform.Rotation -= 180.0f * ts;
+    }
+
     {
         HZ_PROFILE_SCOPE("CameraController::OnUpdate");
         m_CameraController.OnUpdate(ts);
@@ -39,6 +58,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
         HZ_PROFILE_SCOPE("Renderer Draw");
         Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
+        Layer::OnUpdate(ts);
 
         static float rotation = 0.0f;
         rotation += ts * 50.0f;
