@@ -34,6 +34,7 @@ namespace Hazel
 
         virtual void OnEvent(Event& event)
         {
+            m_ECS.OnEvent(event);
         }
 
         const std::string& GetName() const

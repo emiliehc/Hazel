@@ -99,6 +99,18 @@
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h">
       <Filter>src\Hazel\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\ECS\Components.h">
+      <Filter>src\Hazel\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\ECS\ECSCore.h">
+      <Filter>src\Hazel\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\ECS\ECSTypeDefs.h">
+      <Filter>src\Hazel\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\ECS\Systems.h">
+      <Filter>src\Hazel\ECS</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h">
       <Filter>src\Hazel\Events</Filter>
     </ClInclude>
@@ -1317,10 +1329,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\ECS\Systems.h" />
-    <ClInclude Include="src\Hazel\ECS\Components.h" />
-    <ClInclude Include="src\Hazel\ECS\ECSCore.h" />
-    <ClInclude Include="src\Hazel\ECS\ECSTypeDefs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1334,6 +1342,12 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Log.cpp">
       <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\ECS\ECSCore.cpp">
+      <Filter>src\Hazel\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\ECS\Systems.cpp">
+      <Filter>src\Hazel\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ImGui\ImGuiBuild.cpp">
       <Filter>src\Hazel\ImGui</Filter>
@@ -1401,7 +1415,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\ECS\Systems.cpp" />
-    <ClCompile Include="src\Hazel\ECS\ECSCore.cpp" />
   </ItemGroup>
 </Project>

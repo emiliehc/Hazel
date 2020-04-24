@@ -4,6 +4,8 @@
 #include "Hazel/Core/Timestep.h"
 #include <set>
 
+#include "Hazel/Events/Event.h"
+
 namespace Hazel
 {
     class ECS;
@@ -18,6 +20,10 @@ namespace Hazel
         virtual ~System() = default;
         virtual void OnUpdate(Timestep ts) = 0;
 
+        virtual void OnEvent(Event& event)
+        {
+        }
+
         virtual void OnEntityAdded(Entity e)
         {
         }
@@ -25,6 +31,7 @@ namespace Hazel
         virtual void OnEntityRemoved(Entity e)
         {
         }
+
 
     public:
         std::set<Entity> m_Entities;

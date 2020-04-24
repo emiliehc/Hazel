@@ -412,7 +412,7 @@ namespace Hazel
         return s_Data.Stats;
     }
 
-    void Renderer2D::ResetStates()
+    void Renderer2D::ResetStats()
     {
         memset(&s_Data.Stats, 0, sizeof Statistics);
     }

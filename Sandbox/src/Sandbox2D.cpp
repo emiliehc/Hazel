@@ -47,7 +47,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
         m_CameraController.OnUpdate(ts);
     }
 
-    Hazel::Renderer2D::ResetStates();
+    Hazel::Renderer2D::ResetStats();
     {
         HZ_PROFILE_SCOPE("Renderer Prep");
         Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
