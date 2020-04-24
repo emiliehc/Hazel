@@ -269,6 +269,15 @@ namespace Hazel
             return system;
         }
 
+        template<typename T>
+        void DeregisterSystem()
+        {
+            const char* typeName = typeid(T).name();
+
+            HZ_CORE_ASSERT(m_Systems.find(typeName) != m_Systems.end(), "System does not exist.");
+            m_Systems.erase(typeName);
+        }
+
         template <typename T>
         void SetSignature(Signature signature)
         {
@@ -508,9 +517,15 @@ namespace Hazel
 
         // System methods
         template <typename T>
-        std::shared_ptr<T> RegisterSystem()
+        Ref<T> RegisterSystem()
         {
             return m_SystemManager->RegisterSystem<T>(this);
+        }
+
+        template <typename T>
+        void DeregisterSystem()
+        {
+            m_SystemManager->DeregisterSystem<T>();
         }
 
         template <typename T>
