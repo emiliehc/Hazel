@@ -11,9 +11,28 @@ namespace GD
 {
     GDLayer::GDLayer() : Layer("MainGame")
     {
-        m_Camera = &m_ECS.RegisterSystem<CameraSystem>()->GetCamera();
+        // register additional components
+
+        // register additional systems
+        auto gameLogicSys = m_ECS.RegisterSystem<GameLogicSystem>();
+        {
+            Signature signature;
+            signature.set(m_ECS.GetComponentType<Transform>());
+            m_ECS.SetSystemSignature<GameLogicSystem>(signature);
+        }
+
+        // create entities
+        // create player
+        Entity player = m_ECS.CreateEntity();
+        m_ECS.AddComponent<Transform>(player, {{1.0f, 1.0f, 0.9f}, {1.0f, 1.0f}, 0.0f});
+        m_ECS.AddComponent<Colored>(player, {glm::vec4(1.0f)});
+        m_ECS.AddComponent<Drawable>(player, {PrimitiveGeometryType::Quad});
+        gameLogicSys->SetPlayer(player);
 
         m_ECS.CreateQuad({0.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
+
+        // init camera
+        m_Camera = &m_ECS.RegisterSystem<CameraSystem>()->GetCamera();
     }
 
     GDLayer::~GDLayer()

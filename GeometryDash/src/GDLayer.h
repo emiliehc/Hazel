@@ -15,9 +15,9 @@ namespace GD
 
         void OnAttach() override;
         void OnDetach() override;
-        void OnUpdate(Hazel::Timestep ts) override;
+        void OnUpdate(Timestep ts) override;
         void OnImGuiRender() override;
-        void OnEvent(Hazel::Event& event) override;
+        void OnEvent(Event& event) override;
 
     private:
         OrthographicCamera* m_Camera;
