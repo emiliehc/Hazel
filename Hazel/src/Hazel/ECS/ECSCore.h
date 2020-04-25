@@ -279,6 +279,15 @@ namespace Hazel
         }
 
         template <typename T>
+        void DeregisterSystem()
+        {
+            const char* typeName = typeid(T).name();
+
+            HZ_CORE_ASSERT(m_Systems.find(typeName) != m_Systems.end(), "System does not exist.");
+            m_Systems.erase(typeName);
+        }
+
+        template <typename T>
         void SetSignature(Signature signature)
         {
             const char* typeName = typeid(T).name();
@@ -533,6 +542,12 @@ namespace Hazel
         void DeregisterSystem()
         {
             m_SystemManager->DeregisterSystem<T>();
+        }
+
+        template <typename T>
+        void DeregisterSystem()
+        {
+            m_SystemManager.DeregisterSystem<T>();
         }
 
         template <typename T>
