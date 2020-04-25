@@ -13,10 +13,31 @@ using namespace Hazel;
 
 namespace GD
 {
-    class CameraSystem : public System
+    // custom 2d renderer
+    class GDRendererSystem : public System
     {
     public:
-        explicit CameraSystem(ECS* ecs);
+        explicit GDRendererSystem(ECS* ecs);
+
+        Ref<System> Clone() const override;
+
+        ~GDRendererSystem() override = default;
+
+        void OnUpdate(Timestep ts) override;
+
+        void SetAccentColor(const glm::vec4& accentColor)
+        {
+            m_AccentColor = accentColor;
+        }
+
+    private:
+        glm::vec4 m_AccentColor = {0.0f, 0.3176470588f, 1.0f, 1.0f};
+    };
+
+    class GDCameraSystem : public System
+    {
+    public:
+        explicit GDCameraSystem(ECS* ecs);
 
         void OnEvent(Event& event) override;
 
@@ -32,7 +53,8 @@ namespace GD
             return m_Camera;
         }
 
-        Entity GetPlayer() const {
+        Entity GetPlayer() const
+        {
             return m_Player;
         }
 
@@ -40,8 +62,9 @@ namespace GD
 
         Ref<System> Clone() const override
         {
-            return std::static_pointer_cast<System>(std::make_shared<CameraSystem>(*this));
+            return std::static_pointer_cast<System>(std::make_shared<GDCameraSystem>(*this));
         }
+
     private:
         // player
         Entity m_Player;
@@ -57,10 +80,10 @@ namespace GD
         float m_CameraTranslationSpeed = 1.0f, m_CameraRotationSpeed = 180.0f;
     };
 
-    class GameLogicSystem : public System
+    class GDGameLogicSystem : public System
     {
     public:
-        explicit GameLogicSystem(ECS* ecs);
+        explicit GDGameLogicSystem(ECS* ecs);
 
         void OnUpdate(Timestep ts) override;
         void OnEvent(Event& event) override;
@@ -78,11 +101,16 @@ namespace GD
             m_Player = e;
         }
 
-        Ref<System> Clone() const override {
-            return std::static_pointer_cast<System>(std::make_shared<GameLogicSystem>(*this));
+        Ref<System> Clone() const override
+        {
+            return std::static_pointer_cast<System>(std::make_shared<GDGameLogicSystem>(*this));
         }
 
     private:
         Entity m_Player;
+        glm::vec4 m_AccentColor = {0.0f, 0.3176470588f, 1.0f, 1.0f};
+        // the accent color will be used if no custom color is specified
+
+        void SetAccentColor(const glm::vec4& accentColor);
     };
 }

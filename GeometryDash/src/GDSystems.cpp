@@ -9,30 +9,89 @@
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/ECS/ECSCore.h"
+#include "Hazel/Renderer/Renderer2D.h"
 
 namespace GD
 {
 #define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
     // --------------------------------------------
+    // Custom Renderer System
+    // --------------------------------------------
+    GDRendererSystem::GDRendererSystem(ECS* ecs) : System(ecs)
+    {
+    }
+
+    Ref<System> GDRendererSystem::Clone() const
+    {
+        return std::static_pointer_cast<System>(std::make_shared<GDRendererSystem>(*this));
+    }
+
+    void GDRendererSystem::OnUpdate(Timestep ts)
+    {
+        for (const Entity e : m_Entities)
+        {
+            // render
+            // quads
+            const auto& transform = m_ECS->GetComponent<Transform>(e);
+            const auto& color = m_ECS->HasComponent<Colored>(e) ? m_ECS->GetComponent<Colored>(e).Color : m_AccentColor;
+            
+            auto type = m_ECS->GetComponent<Drawable>(e).GeometryType;
+            if (type == PrimitiveGeometryType::Quad)
+            {
+                // has rotation?
+                if (transform.Rotation == 0.0f)
+                {
+                    // has texture?
+                    if (m_ECS->HasComponent<Textured>(e))
+                    {
+                        const auto& textureData = m_ECS->GetComponent<Textured>(e);
+                        Renderer2D::DrawQuad(transform.Position, transform.Size, textureData.Texture,
+                                             textureData.TilingFactor, color);
+                    }
+                    else
+                    {
+                        Renderer2D::DrawQuad(transform.Position, transform.Size, color);
+                    }
+                }
+                else
+                {
+                    // has texture?
+                    if (m_ECS->HasComponent<Textured>(e))
+                    {
+                        const auto& textureData = m_ECS->GetComponent<Textured>(e);
+                        Renderer2D::DrawRotatedQuad(transform.Position, transform.Size, transform.Rotation,
+                                                    textureData.Texture, textureData.TilingFactor, color);
+                    }
+                    else
+                    {
+                        Renderer2D::DrawRotatedQuad(transform.Position, transform.Size, transform.Rotation, color);
+                    }
+                }
+            }
+        }
+    }
+
+    // --------------------------------------------
     // Camera System
     // --------------------------------------------
-    CameraSystem::CameraSystem(ECS* ecs) : System(ecs), m_Player(4294967295), m_AspectRatio(1280.0f / 720.0f), m_Camera(
-                                               -m_AspectRatio * m_ZoomLevel,
-                                               m_AspectRatio * m_ZoomLevel,
-                                               -m_ZoomLevel, m_ZoomLevel),
-                                           m_Rotation(true)
+    GDCameraSystem::GDCameraSystem(ECS* ecs) : System(ecs), m_Player(4294967295), m_AspectRatio(1280.0f / 720.0f),
+                                               m_Camera(
+                                                   -m_AspectRatio * m_ZoomLevel,
+                                                   m_AspectRatio * m_ZoomLevel,
+                                                   -m_ZoomLevel, m_ZoomLevel),
+                                               m_Rotation(true)
     {
     }
 
-    void CameraSystem::OnEvent(Event& event)
+    void GDCameraSystem::OnEvent(Event& event)
     {
         EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(CameraSystem::OnMouseScrolled));
-        dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(CameraSystem::OnWindowResized));
+        dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(GDCameraSystem::OnMouseScrolled));
+        dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(GDCameraSystem::OnWindowResized));
     }
 
-    bool CameraSystem::OnMouseScrolled(MouseScrolledEvent& e)
+    bool GDCameraSystem::OnMouseScrolled(MouseScrolledEvent& e)
     {
         m_ZoomLevel -= e.GetYOffset() * 0.25f;
         m_ZoomLevel = std::max(m_ZoomLevel, 0.00001f);
@@ -43,7 +102,7 @@ namespace GD
         return false;
     }
 
-    bool CameraSystem::OnWindowResized(WindowResizeEvent& e)
+    bool GDCameraSystem::OnWindowResized(WindowResizeEvent& e)
     {
         m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel,
@@ -52,7 +111,7 @@ namespace GD
         return false;
     }
 
-    void CameraSystem::OnUpdate(Timestep ts)
+    void GDCameraSystem::OnUpdate(Timestep ts)
     {
         if (Input::IsKeyPressed(HZ_KEY_A))
         {
@@ -106,15 +165,15 @@ namespace GD
         m_CameraTranslationSpeed = m_ZoomLevel;
     }
 
-    void CameraSystem::OnEntityAdded(Entity e)
+    void GDCameraSystem::OnEntityAdded(Entity e)
     {
     }
 
-    void CameraSystem::OnEntityRemoved(Entity e)
+    void GDCameraSystem::OnEntityRemoved(Entity e)
     {
     }
 
-    void CameraSystem::SetPlayer(Entity e)
+    void GDCameraSystem::SetPlayer(Entity e)
     {
         m_Player = e;
         m_PlayerTransform = &m_ECS->GetComponent<Transform>(e);
@@ -124,11 +183,11 @@ namespace GD
     // --------------------------------------------
     // Game Logic System
     // --------------------------------------------
-    GameLogicSystem::GameLogicSystem(ECS* ecs) : System(ecs), m_Player(4294967295)
+    GDGameLogicSystem::GDGameLogicSystem(ECS* ecs) : System(ecs), m_Player(4294967295)
     {
     }
 
-    void GameLogicSystem::OnUpdate(Timestep ts)
+    void GDGameLogicSystem::OnUpdate(Timestep ts)
     {
         auto& playerTransform = m_ECS->GetComponent<Transform>(m_Player);
         auto& playerRigidBody = m_ECS->GetComponent<RigidBody>(m_Player);
@@ -213,12 +272,14 @@ namespace GD
                 // top
                 float playerBottomToObjectTop = (playerTransform.Position.y - playerTransform.Size.y / 2) - (
                     objectTransform.Position.y + objectTransform.Size.y / 2);
-                if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -playerTransform.Size.y / 2.0f) {
+                if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -
+                    playerTransform.Size.y / 2.0f)
+                {
                     playerTransform.Position.y = objectTransform.Position.y + objectTransform.Size.y / 2 +
                         playerTransform.Size.y / 2;
                     playerProps.OnTheGround = true;
                     playerRigidBody.Velocity.y = 0.0f;
-                    continue;
+                    break;
                 }
 
                 // bottom
@@ -229,8 +290,18 @@ namespace GD
             }
             case GDObjectType::Ground:
             {
-                // TODO : only check the top
-                continue;
+                // only check top
+                float playerBottomToObjectTop = (playerTransform.Position.y - playerTransform.Size.y / 2) - (
+                    objectTransform.Position.y + objectTransform.Size.y / 2);
+                if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -
+                    playerTransform.Size.y / 2.0f)
+                {
+                    playerTransform.Position.y = objectTransform.Position.y + objectTransform.Size.y / 2 +
+                        playerTransform.Size.y / 2;
+                    playerProps.OnTheGround = true;
+                    playerRigidBody.Velocity.y = 0.0f;
+                }
+                break;
             }
             default:
             {
@@ -240,12 +311,13 @@ namespace GD
         }
     }
 
-    void GameLogicSystem::OnEvent(Event& event)
+    void GDGameLogicSystem::OnEvent(Event& event)
     {
-        // once a space bar event is received, it sends a signal to the on update functino via some kind of shared variable
+        // once a space bar event is received, it sends a signal to the on update functino via some kind of shared variable (for single threaded design only)
+        // get key repeat count. if the repeat count is 1 or greater, ignore it, because that will be managed in the OnUpdate function
     }
 
-    void GameLogicSystem::OnEntityAdded(Entity e)
+    void GDGameLogicSystem::OnEntityAdded(Entity e)
     {
         if (e == m_Player)
         {
@@ -253,7 +325,13 @@ namespace GD
         }
     }
 
-    void GameLogicSystem::OnEntityRemoved(Entity e)
+    void GDGameLogicSystem::OnEntityRemoved(Entity e)
     {
+    }
+
+    void GDGameLogicSystem::SetAccentColor(const glm::vec4& accentColor)
+    {
+        m_AccentColor = accentColor;
+        m_ECS->GetSystem<GDRendererSystem>()->SetAccentColor(accentColor);
     }
 }
