@@ -38,6 +38,10 @@ namespace GD
 
         void SetPlayer(Entity e);
 
+        Ref<System> Clone() const override
+        {
+            return std::static_pointer_cast<System>(std::make_shared<CameraSystem>(*this));
+        }
     private:
         // player
         Entity m_Player;
@@ -72,6 +76,10 @@ namespace GD
         {
             m_Entities.erase(e);
             m_Player = e;
+        }
+
+        Ref<System> Clone() const override {
+            return std::static_pointer_cast<System>(std::make_shared<GameLogicSystem>(*this));
         }
 
     private:
