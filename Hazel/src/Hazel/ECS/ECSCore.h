@@ -363,8 +363,9 @@ namespace Hazel
             return system;
         }
 
-        template<typename T>
-        void DeregisterSystem() {
+        template <typename T>
+        void DeregisterSystem()
+        {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_Systems.find(typeName) != m_Systems.end(), "System does not exist.");
@@ -623,7 +624,8 @@ namespace Hazel
         }
 
         template <typename T>
-        void DeregisterSystem() {
+        void DeregisterSystem()
+        {
             m_SystemManager.DeregisterSystem<T>();
         }
 
