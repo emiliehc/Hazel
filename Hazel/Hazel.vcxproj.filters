@@ -1416,5 +1416,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ECS\Systems.cpp" />
+    <ClCompile Include="src\Hazel\ECS\ECSCore.cpp" />
   </ItemGroup>
 </Project>
