@@ -1343,9 +1343,6 @@
     <ClCompile Include="src\Hazel\Core\Log.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\ECS\ECSCore.cpp">
-      <Filter>src\Hazel\ECS</Filter>
-    </ClCompile>
     <ClCompile Include="src\Hazel\ECS\Systems.cpp">
       <Filter>src\Hazel\ECS</Filter>
     </ClCompile>
