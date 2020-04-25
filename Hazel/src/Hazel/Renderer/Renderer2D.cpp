@@ -150,7 +150,7 @@ namespace Hazel
         }
 
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
-         
+
         s_Data.Stats.DrawCalls++;
     }
 
@@ -228,7 +228,8 @@ namespace Hazel
                               float tilingFactor, const glm::vec4& tintColor)
     {
         HZ_PROFILE_FUNCTION();
-        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
             FlushAndReset();
         }
         constexpr glm::vec4 color(1.0f);
@@ -246,6 +247,11 @@ namespace Hazel
 
         if (texIndex == 0.0f)
         {
+            if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+            {
+                FlushAndReset();
+            }
+
             texIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
@@ -297,7 +303,8 @@ namespace Hazel
                                      const glm::vec4& color)
     {
         HZ_PROFILE_FUNCTION();
-        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
             FlushAndReset();
         }
         constexpr float texIndex = 0.0f;
@@ -349,7 +356,8 @@ namespace Hazel
                                      const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
     {
         HZ_PROFILE_FUNCTION();
-        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
             FlushAndReset();
         }
         float texIndex = 0;
@@ -365,6 +373,11 @@ namespace Hazel
 
         if (texIndex == 0.0f)
         {
+            if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+            {
+                FlushAndReset();
+            }
+
             texIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
