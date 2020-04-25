@@ -436,6 +436,13 @@ namespace Hazel
             }
         }
 
+        void OnEvent(Event& event)
+        {
+            for (auto [id, system] : m_Systems) {
+                system->OnEvent(event);
+            }
+        }
+
     private:
         // Map from system type string pointer to a signature
         std::unordered_map<const char*, Signature> m_Signatures;
@@ -644,6 +651,11 @@ namespace Hazel
         void OnUpdate(Timestep ts)
         {
             m_SystemManager.OnUpdate(ts);
+        }
+
+        void OnEvent(Event& event)
+        {
+            m_SystemManager->OnEvent(event);
         }
 
     private:

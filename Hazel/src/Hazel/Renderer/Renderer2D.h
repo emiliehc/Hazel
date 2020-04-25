@@ -42,7 +42,7 @@ namespace Hazel
             }
         };
         static Statistics GetStats();
-        static void ResetStates();
+        static void ResetStats();
     private:
         static void FlushAndReset();
     };
