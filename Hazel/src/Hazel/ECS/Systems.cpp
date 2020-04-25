@@ -16,11 +16,6 @@ namespace Hazel
     {
     }
 
-    Ref<System> RendererSystem::Clone() const
-    {
-        return std::static_pointer_cast<System>(std::make_shared<RendererSystem>(*this));
-    }
-
     void RendererSystem::OnUpdate(Timestep ts)
     {
         for (const Entity e : m_Entities)

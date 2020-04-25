@@ -17,8 +17,6 @@ namespace Hazel
         {
         }
 
-        virtual Ref<System> Clone() const = 0;
-
         virtual ~System() = default;
         virtual void OnUpdate(Timestep ts) = 0;
 
@@ -47,11 +45,8 @@ namespace Hazel
     public:
         explicit RendererSystem(ECS* ecs);
 
-        Ref<System> Clone() const override;
-
         ~RendererSystem() override = default;
 
         void OnUpdate(Timestep ts) override;
-        
     };
 }

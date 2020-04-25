@@ -87,8 +87,6 @@ namespace Hazel
     public:
         virtual ~IComponentArray() = default;
         virtual void EntityDestroyed(Entity entity) = 0;
-
-        virtual Ref<IComponentArray> Clone() const = 0;
     };
 
 
@@ -96,12 +94,6 @@ namespace Hazel
     class ComponentArray : public IComponentArray
     {
     public:
-
-        Ref<IComponentArray> Clone() const override
-        {
-            return std::static_pointer_cast<IComponentArray>(std::make_shared<ComponentArray<T>>(*this));
-        }
-
         void InsertData(Entity entity, T component)
         {
             HZ_CORE_ASSERT(
@@ -175,50 +167,6 @@ namespace Hazel
     class ComponentManager
     {
     public:
-        ComponentManager()
-        {
-        }
-
-        ComponentManager(const ComponentManager& other) : m_ComponentTypes(other.m_ComponentTypes),
-                                                          m_ComponentArrays(other.m_ComponentArrays),
-                                                          m_NextComponentType(other.m_NextComponentType)
-        {
-            for (auto& [typeName, compArr] : m_ComponentArrays)
-            {
-                compArr = compArr->Clone();
-            }
-        }
-
-        ComponentManager(ComponentManager&& other) noexcept : m_ComponentTypes(std::move(other.m_ComponentTypes)),
-                                                              m_ComponentArrays(std::move(other.m_ComponentArrays)),
-                                                              m_NextComponentType(other.m_NextComponentType)
-        {
-        }
-
-        ComponentManager& operator=(const ComponentManager& other)
-        {
-            if (this == &other)
-                return *this;
-            m_ComponentTypes = other.m_ComponentTypes;
-            m_ComponentArrays = other.m_ComponentArrays;
-            m_NextComponentType = other.m_NextComponentType;
-            for (auto& [typeName, compArr] : m_ComponentArrays)
-            {
-                compArr = compArr->Clone();
-            }
-            return *this;
-        }
-
-        ComponentManager& operator=(ComponentManager&& other) noexcept
-        {
-            if (this == &other)
-                return *this;
-            m_ComponentTypes = std::move(other.m_ComponentTypes);
-            m_ComponentArrays = std::move(other.m_ComponentArrays);
-            m_NextComponentType = other.m_NextComponentType;
-            return *this;
-        }
-
         template <typename T>
         void RegisterComponent()
         {
@@ -308,48 +256,6 @@ namespace Hazel
     class SystemManager
     {
     public:
-        SystemManager()
-        {
-        }
-
-        SystemManager(const SystemManager& other) : m_Signatures(other.m_Signatures),
-                                                    m_Systems(other.m_Systems)
-        {
-            // deep copy
-            for (auto& [typeName, systemRef] : m_Systems)
-            {
-                systemRef = systemRef->Clone();
-            }
-        }
-
-        SystemManager(SystemManager&& other) noexcept : m_Signatures(std::move(other.m_Signatures)),
-                                                        m_Systems(std::move(other.m_Systems))
-        {
-        }
-
-        SystemManager& operator=(const SystemManager& other)
-        {
-            if (this == &other)
-                return *this;
-            m_Signatures = other.m_Signatures;
-            m_Systems = other.m_Systems;
-            // deep copy
-            for (auto& [typeName, systemRef] : m_Systems)
-            {
-                systemRef = systemRef->Clone();
-            }
-            return *this;
-        }
-
-        SystemManager& operator=(SystemManager&& other) noexcept
-        {
-            if (this == &other)
-                return *this;
-            m_Signatures = std::move(other.m_Signatures);
-            m_Systems = std::move(other.m_Systems);
-            return *this;
-        }
-
         template <typename T>
         Ref<T> RegisterSystem(ECS* ecs)
         {
@@ -454,18 +360,11 @@ namespace Hazel
     class ECS
     {
     public:
-        ECS()
-        {
-        }
-
-        ECS CreateSnapshot()
-        {
-            return ECS(*this);
-        }
+        ECS();
 
         Entity CreateEntity()
         {
-            return m_EntityManager.CreateEntity();
+            return m_EntityManager->CreateEntity();
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -564,11 +463,11 @@ namespace Hazel
 
         void DestroyEntity(Entity entity)
         {
-            m_EntityManager.DestroyEntity(entity);
+            m_EntityManager->DestroyEntity(entity);
 
-            m_ComponentManager.EntityDestroyed(entity);
+            m_ComponentManager->EntityDestroyed(entity);
 
-            m_SystemManager.EntityDestroyed(entity);
+            m_SystemManager->EntityDestroyed(entity);
         }
 
 
@@ -576,58 +475,58 @@ namespace Hazel
         template <typename T>
         void RegisterComponent()
         {
-            m_ComponentManager.RegisterComponent<T>();
+            m_ComponentManager->RegisterComponent<T>();
         }
 
         template <typename T>
         void AddComponent(Entity entity, T component)
         {
-            m_ComponentManager.AddComponent<T>(entity, component);
+            m_ComponentManager->AddComponent<T>(entity, component);
 
-            auto signature = m_EntityManager.GetSignature(entity);
-            signature.set(m_ComponentManager.GetComponentType<T>(), true);
-            m_EntityManager.SetSignature(entity, signature);
+            auto signature = m_EntityManager->GetSignature(entity);
+            signature.set(m_ComponentManager->GetComponentType<T>(), true);
+            m_EntityManager->SetSignature(entity, signature);
 
-            m_SystemManager.EntitySignatureChanged(entity, signature);
+            m_SystemManager->EntitySignatureChanged(entity, signature);
         }
 
         template <typename T>
         void RemoveComponent(Entity entity)
         {
-            m_ComponentManager.RemoveComponent<T>(entity);
+            m_ComponentManager->RemoveComponent<T>(entity);
 
-            auto signature = m_EntityManager.GetSignature(entity);
-            signature.set(m_ComponentManager.GetComponentType<T>(), false);
-            m_EntityManager.SetSignature(entity, signature);
+            auto signature = m_EntityManager->GetSignature(entity);
+            signature.set(m_ComponentManager->GetComponentType<T>(), false);
+            m_EntityManager->SetSignature(entity, signature);
 
-            m_SystemManager.EntitySignatureChanged(entity, signature);
+            m_SystemManager->EntitySignatureChanged(entity, signature);
         }
 
         template <typename T>
         T& GetComponent(Entity entity)
         {
-            return m_ComponentManager.GetComponent<T>(entity);
+            return m_ComponentManager->GetComponent<T>(entity);
         }
 
         template <typename T>
         bool HasComponent(Entity entity)
         {
-            const auto entitySignature = m_EntityManager.GetSignature(entity);
-            const auto componentType = m_ComponentManager.GetComponentType<T>();
+            const auto entitySignature = m_EntityManager->GetSignature(entity);
+            const auto componentType = m_ComponentManager->GetComponentType<T>();
             return entitySignature.test(componentType);
         }
 
         template <typename T>
         ComponentType GetComponentType()
         {
-            return m_ComponentManager.GetComponentType<T>();
+            return m_ComponentManager->GetComponentType<T>();
         }
 
         // System methods
         template <typename T>
         Ref<T> RegisterSystem()
         {
-            return m_SystemManager.RegisterSystem<T>(this);
+            return m_SystemManager->RegisterSystem<T>(this);
         }
 
         template <typename T>
@@ -639,18 +538,18 @@ namespace Hazel
         template <typename T>
         void SetSystemSignature(Signature signature)
         {
-            m_SystemManager.SetSignature<T>(signature);
+            m_SystemManager->SetSignature<T>(signature);
         }
 
         template <typename T>
         Ref<T> GetSystem()
         {
-            return m_SystemManager.GetSystem<T>();
+            return m_SystemManager->GetSystem<T>();
         }
 
         void OnUpdate(Timestep ts)
         {
-            m_SystemManager.OnUpdate(ts);
+            m_SystemManager->OnUpdate(ts);
         }
 
         void OnEvent(Event& event)
@@ -659,8 +558,8 @@ namespace Hazel
         }
 
     private:
-        ComponentManager m_ComponentManager;
-        EntityManager m_EntityManager;
-        SystemManager m_SystemManager;
+        Scope<ComponentManager> m_ComponentManager;
+        Scope<EntityManager> m_EntityManager;
+        Scope<SystemManager> m_SystemManager;
     };
 }
