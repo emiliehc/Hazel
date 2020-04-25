@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\GDComponents.h" />
+    <ClInclude Include="src\GDGameObject.h" />
     <ClInclude Include="src\GDLayer.h" />
     <ClInclude Include="src\GDSystems.h" />
   </ItemGroup>

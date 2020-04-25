@@ -72,7 +72,7 @@ namespace GD
 
         // camera
         float m_AspectRatio;
-        float m_ZoomLevel = 8.0f;
+        float m_ZoomLevel = 6.0f;
         OrthographicCamera m_Camera;
         bool m_Rotation;
         float m_CameraRotation = 0.0f;

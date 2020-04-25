@@ -240,7 +240,7 @@ namespace GD
         playerRigidBody.Velocity += playerRigidBody.Acceleration * ts.GetSeconds();
         // vertical velocity cap
         playerRigidBody.Velocity.y = std::max(playerRigidBody.Velocity.y, -20.0f);
-        playerRigidBody.Velocity.y = std::min(playerRigidBody.Velocity.y, 30.0f);
+        playerRigidBody.Velocity.y = std::min(playerRigidBody.Velocity.y, 25.0f);
         // TODO : these limit literals will be extracted later into private fields for better access
         playerTransform.Position += playerRigidBody.Velocity * ts.GetSeconds();
 

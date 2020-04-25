@@ -52,8 +52,21 @@ namespace GD
         gameLogicSys->SetPlayer(player);
         camSys->SetPlayer(player);
 
-        Entity quad = m_ECS.CreateQuad({0.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
-        m_ECS.AddComponent<GDObject>(quad, {GDObjectType::Square});
+        // ground
+        for (int i = 0; i < 10; i++)
+        {
+            Entity ground = m_ECS.CreateQuad({0.0f + i * 3.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
+            m_ECS.AddComponent<GDObject>(ground, {GDObjectType::Ground});
+        }
+
+        auto textureSquare = Texture2D::Create("assets/res/groundSquare_01_001-uhd.png");
+        for (int i = 0; i < 3; i++)
+        {
+            Entity square = m_ECS.CreateQuad({7.0f + i * 2.0f, 3.0f + i * 0.5f, 0.0f}, {1.0f, 1.0f}, textureSquare);
+            m_ECS.RemoveComponent<Colored>(square);
+            m_ECS.AddComponent<GDObject>(square, {GDObjectType::Square});
+        }
+
 
         // init camera
         m_Camera = &camSys->GetCamera();
@@ -73,7 +86,6 @@ namespace GD
 
     void GDLayer::OnUpdate(Timestep ts)
     {
-
         RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         RenderCommand::Clear();
 

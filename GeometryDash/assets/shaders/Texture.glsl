@@ -42,6 +42,6 @@ in float v_TilingFactor;
 uniform sampler2D u_Textures[32];
 
 void main() {
-    color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color; // TODO : add tiling factor back as part of the vertex!!!
+    color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
 }
 
