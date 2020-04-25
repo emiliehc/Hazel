@@ -3,6 +3,9 @@
 
 #include "GDComponents.h"
 #include "GDSystems.h"
+#include "Hazel/Core/Input.h"
+#include "Hazel/Core/KeyCodes.h"
+#include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Renderer/Renderer2D.h"
 #include "Hazel/Renderer/RenderCommand.h"
 
@@ -60,10 +63,11 @@ namespace GD
 
     void GDLayer::OnUpdate(Timestep ts)
     {
+
         RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         RenderCommand::Clear();
 
-        Renderer2D::BeginScene(*m_Camera);
+        Renderer2D::BeginScene(m_ECS.GetSystem<CameraSystem>()->GetCamera());
 
         Layer::OnUpdate(ts);
 
@@ -77,5 +81,19 @@ namespace GD
     void GDLayer::OnEvent(Event& event)
     {
         Layer::OnEvent(event);
+        static ECS ecs;
+        // snapshot
+        if (event.GetEventType() == KeyPressedEvent::GetStaticType())
+        {
+            KeyPressedEvent* e = (KeyPressedEvent*)&event;
+            if (e->GetKeyCode() == HZ_KEY_X)
+            {
+                ecs = m_ECS;
+            }
+            if (e->GetKeyCode() == HZ_KEY_Z)
+            {
+                m_ECS = ecs;
+            }
+        }
     }
 }
