@@ -7,9 +7,11 @@
 
 #include "Hazel/ECS/Components.h"
 #include "Hazel/Renderer/ParticleSystem.h"
+#include "Hazel/ECS/Systems.h"
 
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
+
 }
 
 static Hazel::Entity s_Ent;
@@ -20,11 +22,11 @@ void Sandbox2D::OnAttach()
 
     m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
 
-    Hazel::Entity e = m_ECS.CreateQuad({0.0f, 0.0f, 0.8f}, {1.0f, 20.0f}, {glm::vec4(1.0f)});
+    Hazel::Entity e = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.8f }, { 1.0f, 20.0f }, { glm::vec4(1.0f) });
 
-    Hazel::Entity e1 = m_ECS.CreateQuad({0.0f, 0.0f, 0.9f}, {3.0f, 2.0f}, m_CheckerboardTexture, 0.5f,
-                                        {0.2f, 0.8f, 0.3f, 1.0f});
+    Hazel::Entity e1 = m_ECS.CreateQuad({ 0.0f, 0.0f, 0.9f }, { 3.0f, 2.0f }, m_CheckerboardTexture, 0.5f, { 0.2f, 0.8f, 0.3f, 1.0f });
     s_Ent = e1;
+
 }
 
 void Sandbox2D::OnDetach()
@@ -83,7 +85,6 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
         }
 
 #if 0
-
         static float rotation = 0.0f;
         rotation += ts * 50.0f;
 
@@ -110,8 +111,6 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
                 Hazel::Renderer2D::DrawQuad({x, y}, {0.45f, 0.45f}, color);
             }
         }
-
-#endif
         Hazel::Renderer2D::EndScene();
     }
 }

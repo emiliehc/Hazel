@@ -18,22 +18,17 @@
 #include "Hazel/Events/Event.h"
 #include "Hazel/Renderer/Texture.h"
 
-namespace Hazel
-{
-    class EntityManager
-    {
+namespace Hazel {
+    class EntityManager {
     public:
-        EntityManager()
-        {
+        EntityManager() {
             // Initialize the queue with all possible entity IDs
-            for (Entity entity = 0; entity < MAX_ENTITIES; ++entity)
-            {
+            for (Entity entity = 0; entity < MAX_ENTITIES; ++entity) {
                 m_AvailableEntities.push(entity);
             }
         }
 
-        Entity CreateEntity()
-        {
+        Entity CreateEntity() {
             HZ_CORE_ASSERT(m_LivingEntityCount < MAX_ENTITIES, "Too many entities in existence.");
 
             // Take an ID from the front of the queue
@@ -44,8 +39,7 @@ namespace Hazel
             return id;
         }
 
-        void DestroyEntity(Entity entity)
-        {
+        void DestroyEntity(Entity entity) {
             HZ_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
 
             // Invalidate the destroyed entity's signature
@@ -56,16 +50,14 @@ namespace Hazel
             --m_LivingEntityCount;
         }
 
-        void SetSignature(Entity entity, Signature signature)
-        {
+        void SetSignature(Entity entity, Signature signature) {
             HZ_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
 
             // Put this entity's signature into the array
             m_Signatures[entity] = signature;
         }
 
-        Signature GetSignature(Entity entity)
-        {
+        Signature GetSignature(Entity entity) {
             HZ_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
 
             // Get this entity's signature from the array
@@ -83,8 +75,7 @@ namespace Hazel
         unsigned m_LivingEntityCount = 0;
     };
 
-    class IComponentArray
-    {
+    class IComponentArray {
     public:
         virtual ~IComponentArray() = default;
         virtual void EntityDestroyed(Entity entity) = 0;
@@ -94,17 +85,14 @@ namespace Hazel
 
 
     template <typename T>
-    class ComponentArray : public IComponentArray
-    {
+    class ComponentArray : public IComponentArray {
     public:
 
-        Ref<IComponentArray> Clone() const override
-        {
+        Ref<IComponentArray> Clone() const override {
             return std::static_pointer_cast<IComponentArray>(std::make_shared<ComponentArray<T>>(*this));
         }
 
-        void InsertData(Entity entity, T component)
-        {
+        void InsertData(Entity entity, T component) {
             HZ_CORE_ASSERT(
                 m_EntityToIndexMap.find(entity) == m_EntityToIndexMap.end(),
                 "Component added to same entity more than once.");
@@ -117,10 +105,9 @@ namespace Hazel
             ++m_Size;
         }
 
-        void RemoveData(Entity entity)
-        {
+        void RemoveData(Entity entity) {
             HZ_CORE_ASSERT(m_EntityToIndexMap.find(entity) != m_EntityToIndexMap.end(),
-                           "Removing non-existent component.");
+                "Removing non-existent component.");
 
             // Copy element at end into deleted element's place to maintain density
             unsigned long long indexOfRemovedEntity = m_EntityToIndexMap[entity];
@@ -138,19 +125,16 @@ namespace Hazel
             --m_Size;
         }
 
-        T& GetData(Entity entity)
-        {
+        T& GetData(Entity entity) {
             HZ_CORE_ASSERT(m_EntityToIndexMap.find(entity) != m_EntityToIndexMap.end(),
-                           "Retrieving non-existent component.");
+                "Retrieving non-existent component.");
 
             // Return a reference to the entity's component
             return m_ComponentArray[m_EntityToIndexMap[entity]];
         }
 
-        void EntityDestroyed(Entity entity) override
-        {
-            if (m_EntityToIndexMap.find(entity) != m_EntityToIndexMap.end())
-            {
+        void EntityDestroyed(Entity entity) override {
+            if (m_EntityToIndexMap.find(entity) != m_EntityToIndexMap.end()) {
                 // Remove the entity's component if it existed
                 RemoveData(entity);
             }
@@ -173,45 +157,35 @@ namespace Hazel
         unsigned long long m_Size{};
     };
 
-    class ComponentManager
-    {
+    class ComponentManager {
     public:
-        ComponentManager()
-        {
-        }
+        ComponentManager() {}
 
         ComponentManager(const ComponentManager& other) : m_ComponentTypes(other.m_ComponentTypes),
-                                                          m_ComponentArrays(other.m_ComponentArrays),
-                                                          m_NextComponentType(other.m_NextComponentType)
-        {
-            for (auto& [typeName, compArr] : m_ComponentArrays)
-            {
+            m_ComponentArrays(other.m_ComponentArrays),
+            m_NextComponentType(other.m_NextComponentType) {
+            for (auto& [typeName, compArr] : m_ComponentArrays) {
                 compArr = compArr->Clone();
             }
         }
 
         ComponentManager(ComponentManager&& other) noexcept : m_ComponentTypes(std::move(other.m_ComponentTypes)),
-                                                              m_ComponentArrays(std::move(other.m_ComponentArrays)),
-                                                              m_NextComponentType(other.m_NextComponentType)
-        {
-        }
+            m_ComponentArrays(std::move(other.m_ComponentArrays)),
+            m_NextComponentType(other.m_NextComponentType) {}
 
-        ComponentManager& operator=(const ComponentManager& other)
-        {
+        ComponentManager& operator=(const ComponentManager& other) {
             if (this == &other)
                 return *this;
             m_ComponentTypes = other.m_ComponentTypes;
             m_ComponentArrays = other.m_ComponentArrays;
             m_NextComponentType = other.m_NextComponentType;
-            for (auto& [typeName, compArr] : m_ComponentArrays)
-            {
+            for (auto& [typeName, compArr] : m_ComponentArrays) {
                 compArr = compArr->Clone();
             }
             return *this;
         }
 
-        ComponentManager& operator=(ComponentManager&& other) noexcept
-        {
+        ComponentManager& operator=(ComponentManager&& other) noexcept {
             if (this == &other)
                 return *this;
             m_ComponentTypes = std::move(other.m_ComponentTypes);
@@ -221,62 +195,55 @@ namespace Hazel
         }
 
         template <typename T>
-        void RegisterComponent()
-        {
+        void RegisterComponent() {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_ComponentTypes.find(typeName) == m_ComponentTypes.end(),
-                           "Registering component type more than once.");
+                "Registering component type more than once.");
 
             // Add this component type to the component type map
-            m_ComponentTypes.insert({typeName, m_NextComponentType});
+            m_ComponentTypes.insert({ typeName, m_NextComponentType });
 
             // Create a ComponentArray pointer and add it to the component arrays map
-            m_ComponentArrays.insert({typeName, CreateRef<ComponentArray<T>>()});
+            m_ComponentArrays.insert({ typeName, CreateRef<ComponentArray<T>>() });
 
             // Increment the value so that the next component registered will be different
             ++m_NextComponentType;
         }
 
         template <typename T>
-        ComponentType GetComponentType()
-        {
+        ComponentType GetComponentType() {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_ComponentTypes.find(typeName) != m_ComponentTypes.end(),
-                           "Component not registered before use.");
+                "Component not registered before use.");
 
             // Return this component's type - used for creating signatures
             return m_ComponentTypes[typeName];
         }
 
         template <typename T>
-        void AddComponent(Entity entity, T component)
-        {
+        void AddComponent(Entity entity, T component) {
             // Add a component to the array for an entity
             GetComponentArray<T>()->InsertData(entity, component);
         }
 
         template <typename T>
-        void RemoveComponent(Entity entity)
-        {
+        void RemoveComponent(Entity entity) {
             // Remove a component from the array for an entity
             GetComponentArray<T>()->RemoveData(entity);
         }
 
         template <typename T>
-        T& GetComponent(Entity entity)
-        {
+        T& GetComponent(Entity entity) {
             // Get a reference to a component from the array for an entity
             return GetComponentArray<T>()->GetData(entity);
         }
 
-        void EntityDestroyed(Entity entity)
-        {
+        void EntityDestroyed(Entity entity) {
             // Notify each component array that an entity has been destroyed
             // If it has a component for that entity, it will remove it
-            for (auto const& pair : m_ComponentArrays)
-            {
+            for (auto const& pair : m_ComponentArrays) {
                 auto const& component = pair.second;
 
                 component->EntityDestroyed(entity);
@@ -295,55 +262,44 @@ namespace Hazel
 
         // Convenience function to get the statically casted pointer to the ComponentArray of type T.
         template <typename T>
-        Ref<ComponentArray<T>> GetComponentArray()
-        {
+        Ref<ComponentArray<T>> GetComponentArray() {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_ComponentTypes.find(typeName) != m_ComponentTypes.end(),
-                           "Component not registered before use.");
+                "Component not registered before use.");
 
             return std::static_pointer_cast<ComponentArray<T>>(m_ComponentArrays[typeName]);
         }
     };
 
-    class SystemManager
-    {
+    class SystemManager {
     public:
-        SystemManager()
-        {
-        }
+        SystemManager() {}
 
         SystemManager(const SystemManager& other) : m_Signatures(other.m_Signatures),
-                                                    m_Systems(other.m_Systems)
-        {
+            m_Systems(other.m_Systems) {
             // deep copy
-            for (auto& [typeName, systemRef] : m_Systems)
-            {
+            for (auto& [typeName, systemRef] : m_Systems) {
                 systemRef = systemRef->Clone();
             }
         }
 
         SystemManager(SystemManager&& other) noexcept : m_Signatures(std::move(other.m_Signatures)),
-                                                        m_Systems(std::move(other.m_Systems))
-        {
-        }
+            m_Systems(std::move(other.m_Systems)) {}
 
-        SystemManager& operator=(const SystemManager& other)
-        {
+        SystemManager& operator=(const SystemManager& other) {
             if (this == &other)
                 return *this;
             m_Signatures = other.m_Signatures;
             m_Systems = other.m_Systems;
             // deep copy
-            for (auto& [typeName, systemRef] : m_Systems)
-            {
+            for (auto& [typeName, systemRef] : m_Systems) {
                 systemRef = systemRef->Clone();
             }
             return *this;
         }
 
-        SystemManager& operator=(SystemManager&& other) noexcept
-        {
+        SystemManager& operator=(SystemManager&& other) noexcept {
             if (this == &other)
                 return *this;
             m_Signatures = std::move(other.m_Signatures);
@@ -352,21 +308,19 @@ namespace Hazel
         }
 
         template <typename T>
-        Ref<T> RegisterSystem(ECS* ecs)
-        {
+        Ref<T> RegisterSystem(ECS* ecs) {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_Systems.find(typeName) == m_Systems.end(), "Registering system more than once.");
 
             // Create a pointer to the system and return it so it can be used externally
             auto system = CreateRef<T>(ecs);
-            m_Systems.insert({typeName, system});
+            m_Systems.insert({ typeName, system });
             return system;
         }
 
         template <typename T>
-        void DeregisterSystem()
-        {
+        void DeregisterSystem() {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_Systems.find(typeName) != m_Systems.end(), "System does not exist.");
@@ -374,47 +328,40 @@ namespace Hazel
         }
 
         template <typename T>
-        void SetSignature(Signature signature)
-        {
+        void SetSignature(Signature signature) {
             const char* typeName = typeid(T).name();
 
             HZ_CORE_ASSERT(m_Systems.find(typeName) != m_Systems.end(), "System used before registered.");
 
             // Set the signature for this system
-            m_Signatures.insert({typeName, signature});
+            m_Signatures.insert({ typeName, signature });
         }
 
-        void EntityDestroyed(Entity entity)
-        {
+        void EntityDestroyed(Entity entity) {
             // Erase a destroyed entity from all system lists
             // mEntities is a set so no check needed
-            for (auto const& pair : m_Systems)
-            {
+            for (auto const& pair : m_Systems) {
                 auto const& system = pair.second;
 
                 system->m_Entities.erase(entity);
             }
         }
 
-        void EntitySignatureChanged(Entity entity, Signature entitySignature)
-        {
+        void EntitySignatureChanged(Entity entity, Signature entitySignature) {
             // Notify each system that an entity's signature changed
-            for (auto const& pair : m_Systems)
-            {
+            for (auto const& pair : m_Systems) {
                 auto const& type = pair.first;
                 auto const& system = pair.second;
                 auto const& systemSignature = m_Signatures[type];
 
                 // Entity signature matches system signature - insert into set
-                if ((entitySignature & systemSignature) == systemSignature)
-                {
+                if ((entitySignature & systemSignature) == systemSignature) {
                     system->m_Entities.insert(entity);
                     // notify the system about the change
                     system->OnEntityAdded(entity);
                 }
-                    // Entity signature does not match system signature - erase from set
-                else
-                {
+                // Entity signature does not match system signature - erase from set
+                else {
                     system->m_Entities.erase(entity);
                     // notify the system about the change
                     system->OnEntityRemoved(entity);
@@ -423,16 +370,13 @@ namespace Hazel
         }
 
         template <typename T>
-        Ref<T> GetSystem()
-        {
+        Ref<T> GetSystem() {
             const char* typeName = typeid(T).name();
             return std::static_pointer_cast<T>(m_Systems[typeName]);
         }
 
-        void OnUpdate(Timestep ts)
-        {
-            for (auto [id, system] : m_Systems)
-            {
+        void OnUpdate(Timestep ts) {
+            for (auto [id, system] : m_Systems) {
                 system->OnUpdate(ts);
             }
         }
@@ -452,20 +396,15 @@ namespace Hazel
         std::unordered_map<const char*, Ref<System>> m_Systems;
     };
 
-    class ECS
-    {
+    class ECS {
     public:
-        ECS()
-        {
-        }
+        ECS() {}
 
-        ECS CreateSnapshot()
-        {
+        ECS CreateSnapshot() {
             return ECS(*this);
         }
 
-        Entity CreateEntity()
-        {
+        Entity CreateEntity() {
             return m_EntityManager.CreateEntity();
         }
 
@@ -474,88 +413,80 @@ namespace Hazel
 
         // creating quads
         // normal quads
-        Entity CreateQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
-        {
+        Entity CreateQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, 0.0f});
-            AddComponent<Colored>(e, {color});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Transform>(e, { {position.x, position.y, 0.0f}, size, 0.0f });
+            AddComponent<Colored>(e, { color });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
             return e;
         }
 
-        Entity CreateQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
-        {
+        Entity CreateQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {position, size, 0.0f});
-            AddComponent<Colored>(e, {color});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Transform>(e, { position, size, 0.0f });
+            AddComponent<Colored>(e, { color });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
             return e;
         }
 
         Entity CreateQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture,
-                          float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f))
-        {
+            float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f)) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, 0.0f});
-            AddComponent<Colored>(e, {tintColor});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
-            AddComponent<Textured>(e, {texture, tilingFactor});
+            AddComponent<Transform>(e, { {position.x, position.y, 0.0f}, size, 0.0f });
+            AddComponent<Colored>(e, { tintColor });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
+            AddComponent<Textured>(e, { texture, tilingFactor });
             return e;
         }
 
         Entity CreateQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture,
-                          float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f))
-        {
+            float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f)) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {position, size, 0.0f});
-            AddComponent<Colored>(e, {tintColor});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
-            AddComponent<Textured>(e, {texture, tilingFactor});
+            AddComponent<Transform>(e, { position, size, 0.0f });
+            AddComponent<Colored>(e, { tintColor });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
+            AddComponent<Textured>(e, { texture, tilingFactor });
             return e;
         }
 
         // rotated quads
         Entity CreateRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
-                                 const glm::vec4& color)
-        {
+            const glm::vec4& color) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, rotation});
-            AddComponent<Colored>(e, {color});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Transform>(e, { {position.x, position.y, 0.0f}, size, rotation });
+            AddComponent<Colored>(e, { color });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
             return e;
         }
 
         Entity CreateRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
-                                 const glm::vec4& color)
-        {
+            const glm::vec4& color) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {position, size, rotation});
-            AddComponent<Colored>(e, {color});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
+            AddComponent<Transform>(e, { position, size, rotation });
+            AddComponent<Colored>(e, { color });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
             return e;
         }
 
         Entity CreateRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
-                                 const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
-                                 const glm::vec4& tintColor = glm::vec4(1.0f))
-        {
+            const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
+            const glm::vec4& tintColor = glm::vec4(1.0f)) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {{position.x, position.y, 0.0f}, size, rotation});
-            AddComponent<Colored>(e, {tintColor});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
-            AddComponent<Textured>(e, {texture, tilingFactor});
+            AddComponent<Transform>(e, { {position.x, position.y, 0.0f}, size, rotation });
+            AddComponent<Colored>(e, { tintColor });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
+            AddComponent<Textured>(e, { texture, tilingFactor });
             return e;
         }
 
         Entity CreateRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
-                                 const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
-                                 const glm::vec4& tintColor = glm::vec4(1.0f))
-        {
+            const Ref<Texture2D>& texture, float tilingFactor = 1.0f,
+            const glm::vec4& tintColor = glm::vec4(1.0f)) {
             Entity e = CreateEntity();
-            AddComponent<Transform>(e, {position, size, rotation});
-            AddComponent<Colored>(e, {tintColor});
-            AddComponent<Drawable>(e, {PrimitiveGeometryType::Quad});
-            AddComponent<Textured>(e, {texture, tilingFactor});
+            AddComponent<Transform>(e, { position, size, rotation });
+            AddComponent<Colored>(e, { tintColor });
+            AddComponent<Drawable>(e, { PrimitiveGeometryType::Quad });
+            AddComponent<Textured>(e, { texture, tilingFactor });
             return e;
         }
 
@@ -563,8 +494,7 @@ namespace Hazel
         // ---------------------------------------------------------------------------------------------
 
 
-        void DestroyEntity(Entity entity)
-        {
+        void DestroyEntity(Entity entity) {
             m_EntityManager.DestroyEntity(entity);
 
             m_ComponentManager.EntityDestroyed(entity);
@@ -575,14 +505,12 @@ namespace Hazel
 
         // Component methods
         template <typename T>
-        void RegisterComponent()
-        {
+        void RegisterComponent() {
             m_ComponentManager.RegisterComponent<T>();
         }
 
         template <typename T>
-        void AddComponent(Entity entity, T component)
-        {
+        void AddComponent(Entity entity, T component) {
             m_ComponentManager.AddComponent<T>(entity, component);
 
             auto signature = m_EntityManager.GetSignature(entity);
@@ -593,8 +521,7 @@ namespace Hazel
         }
 
         template <typename T>
-        void RemoveComponent(Entity entity)
-        {
+        void RemoveComponent(Entity entity) {
             m_ComponentManager.RemoveComponent<T>(entity);
 
             auto signature = m_EntityManager.GetSignature(entity);
@@ -605,52 +532,44 @@ namespace Hazel
         }
 
         template <typename T>
-        T& GetComponent(Entity entity)
-        {
+        T& GetComponent(Entity entity) {
             return m_ComponentManager.GetComponent<T>(entity);
         }
 
         template <typename T>
-        bool HasComponent(Entity entity)
-        {
+        bool HasComponent(Entity entity) {
             const auto entitySignature = m_EntityManager.GetSignature(entity);
             const auto componentType = m_ComponentManager.GetComponentType<T>();
             return entitySignature.test(componentType);
         }
 
         template <typename T>
-        ComponentType GetComponentType()
-        {
+        ComponentType GetComponentType() {
             return m_ComponentManager.GetComponentType<T>();
         }
 
         // System methods
         template <typename T>
-        Ref<T> RegisterSystem()
-        {
+        Ref<T> RegisterSystem() {
             return m_SystemManager.RegisterSystem<T>(this);
         }
 
         template <typename T>
-        void DeregisterSystem()
-        {
+        void DeregisterSystem() {
             m_SystemManager.DeregisterSystem<T>();
         }
 
         template <typename T>
-        void SetSystemSignature(Signature signature)
-        {
+        void SetSystemSignature(Signature signature) {
             m_SystemManager.SetSignature<T>(signature);
         }
 
         template <typename T>
-        Ref<T> GetSystem()
-        {
+        Ref<T> GetSystem() {
             return m_SystemManager.GetSystem<T>();
         }
 
-        void OnUpdate(Timestep ts)
-        {
+        void OnUpdate(Timestep ts) {
             m_SystemManager.OnUpdate(ts);
         }
 
