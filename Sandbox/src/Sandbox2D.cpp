@@ -6,6 +6,7 @@
 
 
 #include "Hazel/ECS/Components.h"
+#include "Hazel/Renderer/ParticleSystem.h"
 
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
@@ -63,11 +64,22 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
         i++;
         if (i % 180 == 45)
         {
-            ecs = m_ECS.CreateSnapshot();
+            ecs = m_ECS;
         }
         else if (i % 180 == 90)
         {
             m_ECS = ecs;
+        }
+
+        // particle effect
+        auto [mouseX, mouseY] = Hazel::Input::GetMousePosition();
+        glm::vec3 mousePos = {mouseX / 1280.0f * 2.0f - 1.0f, -mouseY / 720.0f * 2.0f + 1.0f, 0.95f};
+        if (Hazel::Input::IsMouseButtonPressed(0))
+        {
+            m_ParticleSystem.Emit({
+                mousePos, {0.0f, 0.0f}, {0.5f, 0.5f}, {0.2f, 0.3f, 0.8f, 1.0f}, {0.2f, 0.8f, 0.3f, 0.5f}, 0.1f, 0.0f,
+                0.02f, 1.0f
+            });
         }
 
 #if 0
