@@ -1,7 +1,6 @@
 ﻿#include "GDLayer.h"
 
 
-
 #include "GDAssetManager.h"
 #include "GDComponents.h"
 #include "GDObjectCreator.h"
@@ -55,14 +54,13 @@ namespace GD
         // ground
         for (int i = 0; i < 20; i++)
         {
-            Entity ground = m_ECS.CreateQuad({0.0f + i * 3.0f, 0.0f, 0.0f}, {3.0f, 4.0f}, {0.3f, 0.8f, 0.2f, 1.0f});
-            m_ECS.AddComponent<GDObject>(ground, {GDObjectType::Ground});
+            CreateGround(m_ECS, {0.0f + i * 5.0f, -3.0f, 0.0f});
         }
 
         // squares
         for (int i = 0; i < 3; i++)
         {
-            CreateSquare(m_ECS, { 7.0f + i * 2.0f, 3.0f + i * 0.5f, 0.0f });
+            CreateSquare(m_ECS, {7.0f + i * 2.0f, 3.0f + i * 0.5f, 0.0f});
         }
 
         // spikes

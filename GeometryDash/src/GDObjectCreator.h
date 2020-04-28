@@ -40,4 +40,14 @@ namespace GD
         ecs.AddComponent<GDObject>(triangle, {GDObjectType::Triangle, true});
         return triangle;
     }
+
+    inline Entity CreateGround(ECS& ecs, const glm::vec3 position)
+    {
+        auto textureGround = GDAssetManager::GetTexture("default-ground.png");
+        Entity ground = ecs.CreateQuad(position, {5.0f, 10.0f}, glm::vec4(1.0f));
+        ecs.RemoveComponent<Colored>(ground);
+        ecs.AddComponent<GDObject>(ground, {GDObjectType::Ground, false});
+        ecs.AddComponent<Textured>(ground, {textureGround, 1.0f});
+        return ground;
+    }
 }
