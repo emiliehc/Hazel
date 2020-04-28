@@ -14,6 +14,25 @@
 
 namespace GD
 {
+    // utility functions
+    static float sign(const glm::vec2& p1, const glm::vec2& p2, const glm::vec2& p3)
+    {
+        return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+    }
+
+    static bool IsPointInTriangle(const glm::vec2& pt, const glm::vec2& v1, const glm::vec2& v2, const glm::vec2& v3)
+    {
+        float d1 = sign(pt, v1, v2);
+        float d2 = sign(pt, v2, v3);
+        float d3 = sign(pt, v3, v1);
+
+        bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+        bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+        return !(has_neg && has_pos);
+    }
+
+
 #define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
     // --------------------------------------------
@@ -380,17 +399,57 @@ namespace GD
             }
             case GDObjectType::Triangle:
             {
+
                 const auto& playerPosition = playerTransform.Position;
                 const auto& trianglePosition = objectTransform.Position;
-                float distance = glm::distance(glm::vec2{playerPosition.x, playerPosition.y}, glm::vec2{trianglePosition.x, trianglePosition.y});
+#if 0
+                float distance = glm::distance(glm::vec2{playerPosition.x, playerPosition.y},
+                                               glm::vec2{trianglePosition.x, trianglePosition.y});
                 if (distance > playerTransform.Size.x / 2 + objectTransform.Size.x / 2)
                 {
                     // not colliding
                     break;
                 }
+#endif
+
+                bool collide = false;
+                // compute the three points
+                glm::vec2 pt1 = {
+                    trianglePosition.x,
+                    trianglePosition.y + objectTransform.Size.y / 2
+                };
+                glm::vec2 pt2 = {
+                    trianglePosition.x - objectTransform.Size.x / 2,
+                    trianglePosition.y - objectTransform.Size.y / 2
+                };
+                glm::vec2 pt3 = {
+                    trianglePosition.x + objectTransform.Size.x / 2,
+                    trianglePosition.y - objectTransform.Size.y / 2
+                };
+
+                // player coords
+                glm::vec2 playerPts[4] = {
+                    {playerPosition.x + playerTransform.Size.x / 2, playerPosition.y + playerTransform.Size.y / 2},
+                    {playerPosition.x - playerTransform.Size.x / 2, playerPosition.y + playerTransform.Size.y / 2},
+                    {playerPosition.x - playerTransform.Size.x / 2, playerPosition.y - playerTransform.Size.y / 2},
+                    {playerPosition.x + playerTransform.Size.x / 2, playerPosition.y - playerTransform.Size.y / 2}
+                };
+
+                for(int i = 0; i < 4; i++)
+                {
+                    if (IsPointInTriangle(playerPts[i], pt1, pt2, pt3))
+                    {
+                        collide = true;
+                        break;
+                    }
+                }
 
                 // kill
-                HZ_ASSERT(false, "Dead");
+                if (objectProps.Killer && collide)
+                {
+                    HZ_ASSERT(false, "Dead");
+                }
+
                 break;
             }
             default:
