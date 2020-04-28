@@ -54,19 +54,19 @@ namespace GD
         // ground
         for (int i = 0; i < 20; i++)
         {
-            CreateGround(m_ECS, {0.0f + i * 5.0f, -3.0f, 0.0f});
+            CreateGround(m_ECS, {0.0f + i * 5.0f, -5.0f, 0.8f});
         }
 
         // squares
         for (int i = 0; i < 3; i++)
         {
-            CreateSquare(m_ECS, {7.0f + i * 2.0f, 3.0f + i * 0.5f, 0.0f});
+            CreateSquare(m_ECS, {7.0f + i * 2.0f, 1.0f + i * 0.5f, 0.0f});
         }
 
         // spikes
         for (int i = 0; i < 3; i++)
         {
-            CreateTriangle(m_ECS, {20.0f + i, 2.5f, 0.0f});
+            CreateTriangle(m_ECS, {20.0f + i, 0.5f, 0.0f});
         }
 
 
