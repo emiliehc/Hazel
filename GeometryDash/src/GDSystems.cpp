@@ -218,8 +218,6 @@ namespace GD
         auto& playerGravity = m_ECS->GetComponent<Gravity>(m_Player);
         auto& playerProps = m_ECS->GetComponent<GDPlayer>(m_Player);
         // physics logic
-        // treat the player as a circle for collision detections
-        //
         // link normal jumping to Input::IsKeyPressed (input system),
         // but hook mid-air special jumping up to KeyPressedEvent (event system)
         //
@@ -238,11 +236,11 @@ namespace GD
             // for debug
             if (Input::IsKeyPressed(HZ_KEY_RIGHT))
             {
-                playerRigidBody.Velocity.x = 5.0f;
+                playerRigidBody.Velocity.x = 12.0f;
             }
             else if (Input::IsKeyPressed(HZ_KEY_LEFT))
             {
-                playerRigidBody.Velocity.x = -5.0f;
+                playerRigidBody.Velocity.x = -12.0f;
             }
             else
             {
@@ -331,9 +329,17 @@ namespace GD
 
         for (Entity e : m_Entities)
         {
+            auto& objectProps = m_ECS->GetComponent<GDObject>(e);
+            auto& objectTransform = m_ECS->GetComponent<Transform>(e);
+            if (objectProps.ObjectType == GDObjectType::Background)
+            {
+                objectTransform.Position += glm::vec3{playerRigidBody.Velocity.x * ts / 2, 0.0f, 0.0f};
+                continue;
+            }
+
             // TODO : support rotation
             // TODO : support trangular slope
-            auto& objectTransform = m_ECS->GetComponent<Transform>(e);
+
             // check if it is in range, if not, don't bother with it
             if (playerTransform.Position.x + playerTransform.Size.x / 2 < objectTransform.Position.x - objectTransform
                                                                                                        .Size.x / 2 ||
@@ -342,8 +348,6 @@ namespace GD
             {
                 continue;
             }
-
-            auto& objectProps = m_ECS->GetComponent<GDObject>(e);
 
             switch (objectProps.ObjectType)
             {
@@ -399,7 +403,6 @@ namespace GD
             }
             case GDObjectType::Triangle:
             {
-
                 const auto& playerPosition = playerTransform.Position;
                 const auto& trianglePosition = objectTransform.Position;
 #if 0
@@ -435,7 +438,7 @@ namespace GD
                     {playerPosition.x + playerTransform.Size.x / 2, playerPosition.y - playerTransform.Size.y / 2}
                 };
 
-                for(int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     if (IsPointInTriangle(playerPts[i], pt1, pt2, pt3))
                     {

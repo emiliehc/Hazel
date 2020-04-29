@@ -46,10 +46,11 @@ namespace GD
         auto camSys = m_ECS.RegisterSystem<GDCameraSystem>();
 
         // create entities
-        // create player
-        Entity player = CreatePlayer(m_ECS);
-        gameLogicSys->SetPlayer(player);
-        camSys->SetPlayer(player);
+        // create background
+        for (int i = 0; i < 5; i++)
+        {
+            CreateBackground(m_ECS, { 0.0f + 20.0f * i, 0.0f, -0.9f });
+        }
 
         // ground
         for (int i = 0; i < 20; i++)
@@ -58,7 +59,7 @@ namespace GD
         }
 
         // squares
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 10; i += 2)
         {
             CreateSquare(m_ECS, {7.0f + i * 2.0f, 1.0f + i * 0.5f, 0.0f});
         }
@@ -68,6 +69,11 @@ namespace GD
         {
             CreateTriangle(m_ECS, {20.0f + i, 0.5f, 0.0f});
         }
+
+        // create player
+        Entity player = CreatePlayer(m_ECS);
+        gameLogicSys->SetPlayer(player);
+        camSys->SetPlayer(player);
 
 
         // init camera

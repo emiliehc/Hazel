@@ -24,11 +24,13 @@ namespace GD
         bool OnTheGround;
     };
 
-    enum class GDObjectType : unsigned char {
+    enum class GDObjectType : unsigned char
+    {
         Player = 0,
         Ground = 1,
         Square = 2,
-        Triangle = 3
+        Triangle = 3,
+        Background = 4
     };
 
     struct GDObject

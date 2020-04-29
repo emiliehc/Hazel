@@ -50,4 +50,14 @@ namespace GD
         ecs.AddComponent<Textured>(ground, {textureGround, 1.0f});
         return ground;
     }
+
+    inline Entity CreateBackground(ECS& ecs, const glm::vec3& position)
+    {
+        auto textureBackground = GDAssetManager::GetTexture("game_bg_01_001-uhd.png");
+        Entity background = ecs.CreateQuad(position, {20.0f, 20.0f}, glm::vec4(1.0f));
+        ecs.RemoveComponent<Colored>(background);
+        ecs.AddComponent<Textured>(background, {textureBackground, 1.0f});
+        ecs.AddComponent<GDObject>(background, {GDObjectType::Background, false});
+        return background;
+    }
 }
