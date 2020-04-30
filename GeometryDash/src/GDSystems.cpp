@@ -102,6 +102,7 @@ namespace GD
                                                    -m_ZoomLevel, m_ZoomLevel),
                                                m_Rotation(true)
     {
+        ResetBounds();
     }
 
     void GDCameraSystem::OnEvent(Event& event)
@@ -118,7 +119,7 @@ namespace GD
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel,
                                m_AspectRatio * m_ZoomLevel,
                                -m_ZoomLevel, m_ZoomLevel);
-
+        ResetBounds();
         return false;
     }
 
@@ -128,6 +129,8 @@ namespace GD
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel,
                                m_AspectRatio * m_ZoomLevel,
                                -m_ZoomLevel, m_ZoomLevel);
+        ResetBounds();
+        
         return false;
     }
 
@@ -178,7 +181,34 @@ namespace GD
         }
 
         // update camera position according to the player position
-        //m_CameraPosition = m_PlayerTransform->Position;
+        const auto& playerPos = m_ECS->GetComponent<Transform>(m_Player).Position;
+        const auto& playerVel = m_ECS->GetComponent<RigidBody>(m_Player).Velocity;
+        /*
+        if (playerPos.x < m_CameraPosition.x + left)
+        {
+            m_CameraPosition.x = playerPos.x - left;
+        }
+        if (playerPos.x > m_CameraPosition.x + right)
+        {
+            m_CameraPosition.x = playerPos.x - right;
+        }
+        */
+        if (playerVel.x > 0)
+        {
+            m_CameraPosition.x = playerPos.x - left;
+        }
+        else if (playerVel.x < 0)
+        {
+            m_CameraPosition.x = playerPos.x - right;
+        }
+        if (playerPos.y < m_CameraPosition.y + bottom)
+        {
+            m_CameraPosition.y = playerPos.y - bottom;
+        }
+        if (playerPos.y > m_CameraPosition.y + top)
+        {
+            m_CameraPosition.y = playerPos.y + bottom;
+        }
 
         m_Camera.SetPosition(m_CameraPosition);
 
@@ -196,7 +226,6 @@ namespace GD
     void GDCameraSystem::SetPlayer(Entity e)
     {
         m_Player = e;
-        m_PlayerTransform = &m_ECS->GetComponent<Transform>(e);
     }
 
 
@@ -236,11 +265,11 @@ namespace GD
             // for debug
             if (Input::IsKeyPressed(HZ_KEY_RIGHT))
             {
-                playerRigidBody.Velocity.x = 12.0f;
+                playerRigidBody.Velocity.x = 15.0f;
             }
             else if (Input::IsKeyPressed(HZ_KEY_LEFT))
             {
-                playerRigidBody.Velocity.x = -12.0f;
+                playerRigidBody.Velocity.x = -15.0f;
             }
             else
             {
@@ -333,7 +362,7 @@ namespace GD
             auto& objectTransform = m_ECS->GetComponent<Transform>(e);
             if (objectProps.ObjectType == GDObjectType::Background)
             {
-                objectTransform.Position += glm::vec3{playerRigidBody.Velocity.x * ts / 2, 0.0f, 0.0f};
+                objectTransform.Position += glm::vec3{playerRigidBody.Velocity.x * ts / 1.3f, 0.0f, 0.0f};
                 continue;
             }
 

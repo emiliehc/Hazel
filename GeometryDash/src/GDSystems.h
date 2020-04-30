@@ -68,16 +68,25 @@ namespace GD
     private:
         // player
         Entity m_Player;
-        Transform* m_PlayerTransform;
 
         // camera
         float m_AspectRatio;
-        float m_ZoomLevel = 6.0f;
+        float m_ZoomLevel = 5.92916775f;
         OrthographicCamera m_Camera;
         bool m_Rotation;
         float m_CameraRotation = 0.0f;
         glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};
         float m_CameraTranslationSpeed = 1.0f, m_CameraRotationSpeed = 180.0f;
+
+        float left = -5.0f, right = 5.0f, bottom = -3.0f, top = 3.0f;
+
+        void ResetBounds()
+        {
+            left = -m_AspectRatio * m_ZoomLevel * 0.55f;
+            right = m_AspectRatio * m_ZoomLevel * 0.55f;
+            bottom = -m_ZoomLevel * 0.4f;
+            top = m_ZoomLevel * 0.4f;
+        }
     };
 
     class GDGameLogicSystem : public System
