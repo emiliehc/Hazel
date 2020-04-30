@@ -10,3 +10,6 @@
 [submodule "Hazel/vendor/glm"]
 	path = Hazel/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Hazel/vendor/HazelAudio"]
+	path = Hazel/vendor/HazelAudio
+	url = https://github.com/njchensl/HazelAudio.git
