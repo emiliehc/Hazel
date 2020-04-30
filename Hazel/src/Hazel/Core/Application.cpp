@@ -1,6 +1,8 @@
 #include "hzpch.h"
 #include "Application.h"
 
+
+#include "HazelAudio.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "GLFW/glfw3.h"
 #include "Log.h"
@@ -28,6 +30,8 @@ namespace Hazel
 
         m_ImGuiLayer = new ImGuiLayer;
         PushOverlay(m_ImGuiLayer);
+
+        Audio::Init();
     }
 
     void Application::OnEvent(Event& e)
