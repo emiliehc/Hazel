@@ -82,8 +82,8 @@ namespace GD
 
         void ResetBounds()
         {
-            left = -m_AspectRatio * m_ZoomLevel * 0.55f;
-            right = m_AspectRatio * m_ZoomLevel * 0.55f;
+            left = -m_AspectRatio * m_ZoomLevel * 0.3f;
+            right = m_AspectRatio * m_ZoomLevel * 0.3f;
             bottom = -m_ZoomLevel * 0.4f;
             top = m_ZoomLevel * 0.4f;
         }

@@ -49,7 +49,7 @@ namespace GD
         // create background
         for (int i = 0; i < 5; i++)
         {
-            CreateBackground(m_ECS, { 0.0f + 20.0f * i, 0.0f, -0.9f });
+            CreateBackground(m_ECS, { 0.0f + 20.0f * i, 9.0f, -0.9f });
         }
 
         // ground
