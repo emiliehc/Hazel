@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;..\Hazel\vendor\HazelAudio\HazelAudio\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;..\Hazel\vendor\HazelAudio\HazelAudio\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -116,7 +116,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor;..\Hazel\vendor\glm;..\Hazel\vendor\HazelAudio\HazelAudio\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -142,17 +142,136 @@
     <ClInclude Include="src\GDSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GDApp.cpp" />
     <ClCompile Include="src\GDAssetManager.cpp" />
     <ClCompile Include="src\GDLayer.cpp" />
-    <ClCompile Include="src\GDApp.cpp" />
     <ClCompile Include="src\GDObjectCreator.cpp" />
     <ClCompile Include="src\GDSystems.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\res\AirborneRobots.mp3" />
+    <None Include="assets\res\BackOnTrack.mp3" />
+    <None Include="assets\res\BaseAfterBase.mp3" />
+    <None Include="assets\res\BeastMode.mp3" />
+    <None Include="assets\res\BlastProcessing.mp3" />
+    <None Include="assets\res\CCLocalLevels.dat" />
+    <None Include="assets\res\CantLetGo.mp3" />
+    <None Include="assets\res\Clubstep.mp3" />
+    <None Include="assets\res\Clutterfunk.mp3" />
+    <None Include="assets\res\Cycles.mp3" />
+    <None Include="assets\res\DJRubRub.mp3" />
+    <None Include="assets\res\Deadlocked.mp3" />
+    <None Include="assets\res\DryOut.mp3" />
+    <None Include="assets\res\ElectroFrontlines.mp3" />
+    <None Include="assets\res\Electrodynamix.mp3" />
+    <None Include="assets\res\Electroman.mp3" />
+    <None Include="assets\res\Embers.mp3" />
+    <None Include="assets\res\Fingerdash.mp3" />
+    <None Include="assets\res\GeometricalDominator.mp3" />
+    <None Include="assets\res\HexagonForce.mp3" />
+    <None Include="assets\res\Jumper.mp3" />
+    <None Include="assets\res\Machina.mp3" />
+    <None Include="assets\res\MonsterDanceOff.mp3" />
+    <None Include="assets\res\Payload.mp3" />
+    <None Include="assets\res\Polargeist.mp3" />
+    <None Include="assets\res\Round1.mp3" />
+    <None Include="assets\res\SpacePirates.mp3" />
+    <None Include="assets\res\StayInsideMe.mp3" />
+    <None Include="assets\res\StereoMadness.mp3" />
+    <None Include="assets\res\Striker.mp3" />
+    <None Include="assets\res\The7Seas.mp3" />
+    <None Include="assets\res\TheoryOfEverything.mp3" />
+    <None Include="assets\res\TheoryOfEverything2.mp3" />
+    <None Include="assets\res\TimeMachine.mp3" />
+    <None Include="assets\res\VikingArena.mp3" />
+    <None Include="assets\res\Years.mp3" />
+    <None Include="assets\res\achievement_01.ogg" />
+    <None Include="assets\res\bigFont-hd.fnt" />
+    <None Include="assets\res\bigFont-uhd.fnt" />
+    <None Include="assets\res\bigFont.fnt" />
+    <None Include="assets\res\buyItem01.ogg" />
+    <None Include="assets\res\buyItem03.ogg" />
+    <None Include="assets\res\chatFont-hd.fnt" />
+    <None Include="assets\res\chatFont-uhd.fnt" />
+    <None Include="assets\res\chatFont.fnt" />
+    <None Include="assets\res\chestClick.ogg" />
+    <None Include="assets\res\chestLand.ogg" />
+    <None Include="assets\res\chestOpen01.ogg" />
+    <None Include="assets\res\counter003.ogg" />
+    <None Include="assets\res\crystal01.ogg" />
+    <None Include="assets\res\endStart_02.ogg" />
+    <None Include="assets\res\explode_11.ogg" />
+    <None Include="assets\res\gold01.ogg" />
+    <None Include="assets\res\gold02.ogg" />
+    <None Include="assets\res\highscoreGet02.ogg" />
+    <None Include="assets\res\magicExplosion.ogg" />
+    <None Include="assets\res\menuLoop.mp3" />
+    <None Include="assets\res\playSound_01.ogg" />
+    <None Include="assets\res\quitSound_01.ogg" />
+    <None Include="assets\res\reward01.ogg" />
+    <None Include="assets\res\secretKey.ogg" />
+    <None Include="assets\res\secretLoop.mp3" />
+    <None Include="assets\res\secretLoop02.mp3" />
+    <None Include="assets\res\secretLoop03.mp3" />
+    <None Include="assets\res\secretShop.mp3" />
+    <None Include="assets\res\shop.mp3" />
+    <None Include="assets\res\shop3.mp3" />
+    <None Include="assets\res\xStep.mp3" />
     <None Include="assets\shaders\FlatColor.glsl" />
     <None Include="assets\shaders\Texture.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\res\default-ground.png" />
+    <Image Include="assets\res\default-player.png" />
+    <Image Include="assets\res\default-square.png" />
+    <Image Include="assets\res\default-triangle.png" />
+    <Image Include="assets\res\game_bg_01_001-uhd.png" />
+    <Image Include="assets\res\game_bg_02_001-uhd.png" />
+    <Image Include="assets\res\game_bg_03_001-uhd.png" />
+    <Image Include="assets\res\game_bg_04_001-uhd.png" />
+    <Image Include="assets\res\game_bg_05_001-uhd.png" />
+    <Image Include="assets\res\game_bg_06_001-uhd.png" />
+    <Image Include="assets\res\game_bg_07_001-uhd.png" />
+    <Image Include="assets\res\game_bg_08_001-uhd.png" />
+    <Image Include="assets\res\game_bg_09_001-uhd.png" />
+    <Image Include="assets\res\game_bg_10_001-uhd.png" />
+    <Image Include="assets\res\game_bg_11_001-uhd.png" />
+    <Image Include="assets\res\game_bg_12_001-uhd.png" />
+    <Image Include="assets\res\game_bg_13_001-uhd.png" />
+    <Image Include="assets\res\game_bg_14_001-uhd.png" />
+    <Image Include="assets\res\game_bg_15_001-uhd.png" />
+    <Image Include="assets\res\game_bg_16_001-uhd.png" />
+    <Image Include="assets\res\game_bg_17_001-uhd.png" />
+    <Image Include="assets\res\game_bg_18_001-uhd.png" />
+    <Image Include="assets\res\game_bg_19_001-uhd.png" />
+    <Image Include="assets\res\game_bg_20_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_01_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_02_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_03_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_04_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_05_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_06_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_07_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_08_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_08_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_09_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_09_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_10_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_10_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_11_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_11_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_12_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_12_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_13_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_13_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_14_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_14_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_15_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_15_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_16_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_16_2_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_17_001-uhd.png" />
+    <Image Include="assets\res\groundSquare_17_2_001-uhd.png" />
     <Image Include="assets\textures\Checkerboard.png" />
     <Image Include="assets\textures\ChernoLogo.png" />
   </ItemGroup>

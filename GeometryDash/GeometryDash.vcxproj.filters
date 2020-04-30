@@ -4,6 +4,9 @@
     <Filter Include="assets">
       <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\res">
+      <UniqueIdentifier>{915CB5A8-7D14-F7F5-E61B-D051D2F291E6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{51CD2FD9-3D9B-23DF-262F-9405129CFF43}</UniqueIdentifier>
     </Filter>
@@ -15,24 +18,250 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\GDLayer.h" />
-    <ClInclude Include="src\GDSystems.h" />
-    <ClInclude Include="src\GDComponents.h" />
-    <ClInclude Include="src\GDGameObject.h" />
-    <ClInclude Include="src\GDStaticParticleSystem.h" />
-    <ClInclude Include="src\GDAssetManager.h" />
-    <ClInclude Include="src\GDObjectCreator.h" />
+    <ClInclude Include="src\GDAssetManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDComponents.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDGameObject.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDObjectCreator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDStaticParticleSystem.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDSystems.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GDLayer.cpp" />
     <ClCompile Include="src\GDApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\GDSystems.cpp" />
-    <ClCompile Include="src\GDAssetManager.cpp" />
-    <ClCompile Include="src\GDObjectCreator.cpp" />
+    <ClCompile Include="src\GDAssetManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GDLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GDObjectCreator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GDSystems.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\res\AirborneRobots.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\BackOnTrack.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\BaseAfterBase.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\BeastMode.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\BlastProcessing.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\CCLocalLevels.dat">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\CantLetGo.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Clubstep.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Clutterfunk.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Cycles.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\DJRubRub.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Deadlocked.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\DryOut.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\ElectroFrontlines.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Electrodynamix.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Electroman.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Embers.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Fingerdash.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\GeometricalDominator.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\HexagonForce.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Jumper.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Machina.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\MonsterDanceOff.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Payload.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Polargeist.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Round1.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\SpacePirates.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\StayInsideMe.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\StereoMadness.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Striker.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\The7Seas.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\TheoryOfEverything.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\TheoryOfEverything2.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\TimeMachine.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\VikingArena.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\Years.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\achievement_01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\bigFont-hd.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\bigFont-uhd.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\bigFont.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\buyItem01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\buyItem03.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chatFont-hd.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chatFont-uhd.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chatFont.fnt">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chestClick.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chestLand.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\chestOpen01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\counter003.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\crystal01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\endStart_02.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\explode_11.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\gold01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\gold02.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\highscoreGet02.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\magicExplosion.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\menuLoop.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\playSound_01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\quitSound_01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\reward01.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\secretKey.ogg">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\secretLoop.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\secretLoop02.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\secretLoop03.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\secretShop.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\shop.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\shop3.mp3">
+      <Filter>assets\res</Filter>
+    </None>
+    <None Include="assets\res\xStep.mp3">
+      <Filter>assets\res</Filter>
+    </None>
     <None Include="assets\shaders\FlatColor.glsl">
       <Filter>assets\shaders</Filter>
     </None>
@@ -41,6 +270,159 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\res\default-ground.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\default-player.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\default-square.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\default-triangle.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_01_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_02_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_03_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_04_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_05_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_06_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_07_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_08_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_09_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_10_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_11_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_12_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_13_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_14_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_15_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_16_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_17_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_18_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_19_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\game_bg_20_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_01_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_02_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_03_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_04_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_05_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_06_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_07_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_08_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_08_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_09_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_09_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_10_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_10_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_11_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_11_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_12_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_12_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_13_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_13_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_14_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_14_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_15_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_15_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_16_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_16_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_17_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
+    <Image Include="assets\res\groundSquare_17_2_001-uhd.png">
+      <Filter>assets\res</Filter>
+    </Image>
     <Image Include="assets\textures\Checkerboard.png">
       <Filter>assets\textures</Filter>
     </Image>

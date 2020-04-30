@@ -6,6 +6,7 @@
 #include "GDObjectCreator.h"
 #include "GDStaticParticleSystem.h"
 #include "GDSystems.h"
+#include "HazelAudio.h"
 #include "Hazel/Core/Input.h"
 #include "Hazel/Core/KeyCodes.h"
 #include "Hazel/Events/KeyEvent.h"
@@ -76,8 +77,10 @@ namespace GD
         camSys->SetPlayer(player);
 
 
-        // init camera
-        m_Camera = &camSys->GetCamera();
+        // start audio
+        auto stayInsideMe = AudioSource::LoadFromFile("assets/res/StayInsideMe.mp3");
+        stayInsideMe.SetLoop(true);
+        Audio::Play(stayInsideMe);
     }
 
     GDLayer::~GDLayer()

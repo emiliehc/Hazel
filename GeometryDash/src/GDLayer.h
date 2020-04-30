@@ -18,8 +18,5 @@ namespace GD
         void OnUpdate(Timestep ts) override;
         void OnImGuiRender() override;
         void OnEvent(Event& event) override;
-
-    private:
-        OrthographicCamera* m_Camera;
     };
 }
