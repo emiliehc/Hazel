@@ -11,6 +11,20 @@ workspace "Hazel"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+vectorextensions "AVX2"
+buildoptions {
+    "/Qpar", "/Qpar-report:1", "/Qvec-report:1"
+}
+
+filter "configurations:Release"
+    linkoptions {
+        "/LTCG"
+    }
+filter "configurations:Dist"
+    linkoptions {
+        "/LTCG"
+    }
+
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
