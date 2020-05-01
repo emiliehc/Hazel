@@ -364,7 +364,11 @@ namespace GD
             auto& objectTransform = m_ECS->GetComponent<Transform>(e);
             if (objectProps.ObjectType == GDObjectType::Background)
             {
-                objectTransform.Position += glm::vec3{playerRigidBody.Velocity.x * ts / 1.3f, 0.0f, 0.0f};
+                objectTransform.Position += glm::vec3{
+                    playerRigidBody.Velocity.x * ts / 1.1f,
+                    0.0f,
+                    0.0f
+                };
                 continue;
             }
 
