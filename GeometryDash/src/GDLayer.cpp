@@ -48,13 +48,13 @@ namespace GD
 
         // create entities
         // create background
-        for (int i = 0; i < 5; i++)
+        for (int i = -2; i < 5; i++)
         {
             CreateBackground(m_ECS, { 0.0f + 20.0f * i, 9.0f, -0.9f });
         }
 
         // ground
-        for (int i = 0; i < 20; i++)
+        for (int i = -10; i < 20; i++)
         {
             CreateGround(m_ECS, {0.0f + i * 5.0f, -5.0f, 0.8f});
         }

@@ -130,7 +130,7 @@ namespace GD
                                m_AspectRatio * m_ZoomLevel,
                                -m_ZoomLevel, m_ZoomLevel);
         ResetBounds();
-        
+
         return false;
     }
 
@@ -322,16 +322,18 @@ namespace GD
                 {
                     playerTransform.Rotation -= (playerTransform.Rotation - targetAngle) * ts * 20;
                 }
+
+                // player particle effect on the ground
+                auto& playerPos = playerTransform.Position;
+                for (int i = 0; i < 8; i++)
+                {
+                    GDParticleSystem::Emit({
+                        {playerPos.x, playerPos.y - 0.45f, playerPos.z}, glm::vec2(0.0f),
+                        glm::vec2(2.0f), {1.0f, 0.82f, 0.0f, 1.0f}, {1.0f, 0.55f, 0.0f, 0.5f}, 0.1f, 0.01f,
+                        0.03f, 0.5f
+                    });
+                }
             }
-
-            // player particle effect
-            auto& playerPos = playerTransform.Position;
-            GDParticleSystem::Emit({
-                {playerPos.x, playerPos.y - 0.35f, playerPos.z}, glm::vec2(0.0f),
-                glm::vec2(0.5f), m_AccentColor, glm::vec4(0.0f), 0.25f, 0.01f,
-                0.05f, 1.0f
-            });
-
             break;
         }
         default:
