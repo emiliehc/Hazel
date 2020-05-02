@@ -50,7 +50,7 @@ namespace GD
         // create background
         for (int i = -2; i < 5; i++)
         {
-            CreateBackground(m_ECS, { 0.0f + 20.0f * i, 9.0f, -0.9f });
+            CreateBackground(m_ECS, {0.0f + 20.0f * i, 9.0f, -0.9f});
         }
 
         // ground
@@ -75,12 +75,15 @@ namespace GD
         Entity player = CreatePlayer(m_ECS);
         gameLogicSys->SetPlayer(player);
         camSys->SetPlayer(player);
-
+        m_Player = player;
 
         // start audio
         auto stayInsideMe = AudioSource::LoadFromFile("assets/res/StayInsideMe.mp3");
         stayInsideMe.SetLoop(true);
         Audio::Play(stayInsideMe);
+
+        // ecs backup
+        m_ECSBack = m_ECS;
     }
 
     GDLayer::~GDLayer()
@@ -101,6 +104,20 @@ namespace GD
         RenderCommand::Clear();
 
         Renderer2D::BeginScene(m_ECS.GetSystem<GDCameraSystem>()->GetCamera());
+        // player death check
+        const auto& playerProps = m_ECS.GetComponent<GDPlayer>(m_Player);
+        static float timeElapsed = 0.0f;
+        if (!playerProps.Alive)
+        {
+            // accumulate time up to a point before resetting the ECS
+            timeElapsed += ts;
+            if (timeElapsed > 1.0f)
+            {
+                // return to the last point
+                m_ECS = m_ECSBack;
+                timeElapsed = 0.0f;
+            }
+        }
 
         Layer::OnUpdate(ts);
         GDParticleSystem::OnUpdate(ts);
@@ -114,19 +131,23 @@ namespace GD
     void GDLayer::OnEvent(Event& event)
     {
         Layer::OnEvent(event);
-        static ECS ecs;
         // snapshot
         if (event.GetEventType() == KeyPressedEvent::GetStaticType())
         {
             KeyPressedEvent* e = (KeyPressedEvent*)&event;
             if (e->GetKeyCode() == HZ_KEY_X)
             {
-                ecs = m_ECS;
+                m_ECSBack = m_ECS;
             }
             if (e->GetKeyCode() == HZ_KEY_Z)
             {
-                m_ECS = ecs;
+                m_ECS = m_ECSBack;
             }
+        }
+        else if (event.GetEventType() == WindowResizeEvent::GetStaticType())
+        {
+            // reset ecs backup
+            m_ECSBack = m_ECS;
         }
     }
 }

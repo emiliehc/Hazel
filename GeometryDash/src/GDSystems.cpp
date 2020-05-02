@@ -53,6 +53,11 @@ namespace GD
         {
             // render
             // quads
+            const auto& objectProps = m_ECS->GetComponent<GDObject>(e);
+            if (!objectProps.Visible)
+            {
+                continue;
+            }
             const auto& transform = m_ECS->GetComponent<Transform>(e);
             const auto& color = m_ECS->HasComponent<Colored>(e) ? m_ECS->GetComponent<Colored>(e).Color : m_AccentColor;
 
@@ -246,6 +251,39 @@ namespace GD
         auto& playerRigidBody = m_ECS->GetComponent<RigidBody>(m_Player);
         auto& playerGravity = m_ECS->GetComponent<Gravity>(m_Player);
         auto& playerProps = m_ECS->GetComponent<GDPlayer>(m_Player);
+
+        // check player death
+        static float timeElapsed = 0.0f;
+        if (!playerProps.Alive)
+        {
+            if (timeElapsed == 0.0f)
+            {
+                m_ECS->GetComponent<GDObject>(m_Player).Visible = false;
+                // first frame, emit tons of particles
+                for (int i = 0; i < 100; i++)
+                {
+                    GDParticleSystem::Emit({
+                        {playerTransform.Position.x, playerTransform.Position.y, 1.0f},
+                        {0.0f, 0.0f},
+                        {7.5f, 7.5f},
+                        {1.0f, 0.92f, 0.29f, 1.0f},
+                        {1.0f, 0.52f, 0.29f, 0.0f},
+                        0.2f,
+                        0.05f,
+                        0.05f,
+                        0.9f
+                    });
+                }
+            }
+            timeElapsed += ts;
+
+            return; // the game logic system will stop updating once the player is dead
+        }
+        else
+        {
+            timeElapsed = 0.0f;
+        }
+
         // physics logic
         // link normal jumping to Input::IsKeyPressed (input system),
         // but hook mid-air special jumping up to KeyPressedEvent (event system)
@@ -418,7 +456,7 @@ namespace GD
                 }
 
                 // kill
-                HZ_ASSERT(false, "Dead");
+                playerProps.Alive = false;
                 break;
             }
             case GDObjectType::Ground:
@@ -485,7 +523,7 @@ namespace GD
                 // kill
                 if (objectProps.Killer && collide)
                 {
-                    HZ_ASSERT(false, "Dead");
+                    playerProps.Alive = false;
                 }
 
                 break;

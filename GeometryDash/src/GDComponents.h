@@ -22,6 +22,7 @@ namespace GD
     {
         GDGameMode GameMode;
         bool OnTheGround;
+        bool Alive = true;
     };
 
     enum class GDObjectType : unsigned char
@@ -37,5 +38,6 @@ namespace GD
     {
         GDObjectType ObjectType;
         bool Killer = false;
+        bool Visible = true;
     };
 }

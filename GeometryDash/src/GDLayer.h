@@ -18,5 +18,9 @@ namespace GD
         void OnUpdate(Timestep ts) override;
         void OnImGuiRender() override;
         void OnEvent(Event& event) override;
+
+    private:
+        ECS m_ECSBack;
+        Entity m_Player;
     };
 }
