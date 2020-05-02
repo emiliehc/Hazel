@@ -78,9 +78,9 @@ namespace GD
         m_Player = player;
 
         // start audio
-        auto stayInsideMe = AudioSource::LoadFromFile("assets/res/StayInsideMe.mp3");
-        stayInsideMe.SetLoop(true);
-        Audio::Play(stayInsideMe);
+        auto* stayInsideMe = GDAssetManager::GetAudioSource("StayInsideMe.mp3");
+        stayInsideMe->SetLoop(true);
+        Audio::Play(*stayInsideMe);
 
         // ecs backup
         m_ECSBack = m_ECS;
@@ -109,6 +109,11 @@ namespace GD
         static float timeElapsed = 0.0f;
         if (!playerProps.Alive)
         {
+            if (timeElapsed == 0.0f)
+            {
+                // first time, play death audio
+                Audio::Play(*GDAssetManager::GetAudioSource("explode_11.ogg"));
+            }
             // accumulate time up to a point before resetting the ECS
             timeElapsed += ts;
             if (timeElapsed > 1.0f)

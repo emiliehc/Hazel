@@ -23,13 +23,25 @@ namespace GD
                 HZ_TRACE("Loading Texture: {0}", filename);
                 s_Textures[filename] = Hazel::Texture2D::Create(filepath);
             }
+            else if (extension == L".mp3" || extension == L".ogg")
+            {
+                std::wstring filenamew = path.filename().c_str();
+                std::string filename(filenamew.begin(), filenamew.end());
+                std::wstring filepathw = path.c_str();
+                std::string filepath(filepathw.begin(), filepathw.end());
+                HZ_TRACE("Loading Audio: {0}", filename);
+                s_AudioSources[filename] = Hazel::AudioSource::LoadFromFile(filepath);
+            }
         }
-
-        // TODO : audio and openal at the engine level, then load them
     }
 
     Hazel::Ref<Hazel::Texture2D> GDAssetManager::GetTexture(const std::string& name)
     {
         return s_Textures[name];
+    }
+
+    Hazel::AudioSource* GDAssetManager::GetAudioSource(const std::string& name)
+    {
+        return &s_AudioSources[name];
     }
 }

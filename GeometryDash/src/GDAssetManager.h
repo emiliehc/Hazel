@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <map>
 
+
+#include "HazelAudio.h"
 #include "Hazel/Core/Core.h"
 #include "Hazel/Renderer/Texture.h"
 
@@ -14,7 +16,9 @@ namespace GD
         static void Init();
 
         static Hazel::Ref<Hazel::Texture2D> GetTexture(const std::string& name);
+        static Hazel::AudioSource* GetAudioSource(const std::string& name);
     private:
         inline static std::map<std::string, Hazel::Ref<Hazel::Texture2D>> s_Textures;
+        inline static std::map<std::string, Hazel::AudioSource> s_AudioSources;
     };
 }
