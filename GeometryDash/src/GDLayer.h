@@ -20,7 +20,7 @@ namespace GD
         void OnEvent(Event& event) override;
 
     private:
-        ECS m_ECSBack;
+        std::vector<ECS> m_ECSBackups;
         Entity m_Player;
     };
 }

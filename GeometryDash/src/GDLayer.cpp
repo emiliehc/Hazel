@@ -83,7 +83,7 @@ namespace GD
         Audio::Play(*stayInsideMe);
 
         // ecs backup
-        m_ECSBack = m_ECS;
+        m_ECSBackups.push_back(m_ECS);
     }
 
     GDLayer::~GDLayer()
@@ -119,7 +119,7 @@ namespace GD
             if (timeElapsed > 1.0f)
             {
                 // return to the last point
-                m_ECS = m_ECSBack;
+                m_ECS = m_ECSBackups.back();
                 timeElapsed = 0.0f;
             }
         }
@@ -142,17 +142,20 @@ namespace GD
             KeyPressedEvent* e = (KeyPressedEvent*)&event;
             if (e->GetKeyCode() == HZ_KEY_X)
             {
-                m_ECSBack = m_ECS;
+                if (!m_ECSBackups.size() > 1)
+                {
+                    m_ECSBackups.pop_back();
+                }
             }
             if (e->GetKeyCode() == HZ_KEY_Z)
             {
-                m_ECS = m_ECSBack;
+                m_ECSBackups.push_back(m_ECS);
             }
         }
         else if (event.GetEventType() == WindowResizeEvent::GetStaticType())
         {
             // reset ecs backup
-            m_ECSBack = m_ECS;
+            m_ECSBackups.push_back(m_ECS);
         }
     }
 }
