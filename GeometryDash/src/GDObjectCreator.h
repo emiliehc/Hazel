@@ -12,12 +12,12 @@ namespace GD
     inline Entity CreatePlayer(ECS& ecs)
     {
         Entity player = ecs.CreateEntity();
-        ecs.AddComponent<Transform>(player, {{0.0f, 5.0f, 0.9f}, {1.0f, 1.0f}, 0.0f});
+        ecs.AddComponent<Transform>(player, {{-2.0f, 4.0f, 0.9f}, {1.0f, 1.0f}, 0.0f});
         ecs.AddComponent<Colored>(player, {glm::vec4(1.0f)});
         ecs.AddComponent<Drawable>(player, {PrimitiveGeometryType::Quad});
         ecs.AddComponent<GDPlayer>(player, {GDGameMode::Cube, false});
         ecs.AddComponent<Gravity>(player, {{0.0f, -140.0f, 0.0f}});
-        ecs.AddComponent<RigidBody>(player, {glm::vec3(0.0f), glm::vec3(0.0f), 1.0f, true});
+        ecs.AddComponent<RigidBody>(player, {{15.0f, 0.0f, 0.0f}, glm::vec3(0.0f), 1.0f, true});
         ecs.AddComponent<GDObject>(player, {GDObjectType::Player});
         ecs.AddComponent<Textured>(player, {GDAssetManager::GetTexture("default-player.png"), 1.0f});
         return player;

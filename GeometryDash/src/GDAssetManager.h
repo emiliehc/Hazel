@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <map>
+#include <filesystem>
+#include <future>
 
 
 #include "HazelAudio.h"
@@ -20,5 +22,7 @@ namespace GD
     private:
         inline static std::map<std::string, Hazel::Ref<Hazel::Texture2D>> s_Textures;
         inline static std::map<std::string, Hazel::AudioSource> s_AudioSources;
+
+        static void LoadAsset(std::filesystem::directory_entry entry);
     };
 }

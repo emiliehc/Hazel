@@ -214,7 +214,8 @@ namespace GD
         {
             m_CameraPosition.y = playerPos.y + bottom;
         }
-
+        m_CameraPosition.y = std::max(m_CameraPosition.y, 2.87166715f);
+        
         m_Camera.SetPosition(m_CameraPosition);
 
         m_CameraTranslationSpeed = m_ZoomLevel;
@@ -300,7 +301,8 @@ namespace GD
             {
                 playerRigidBody.Velocity.y = 30.0f;
             }
-            // for debug
+
+#if defined(HZ_DEBUG) || defined(HZ_RELEASE)
             if (Input::IsKeyPressed(HZ_KEY_RIGHT))
             {
                 playerRigidBody.Velocity.x = 15.0f;
@@ -313,6 +315,7 @@ namespace GD
             {
                 playerRigidBody.Velocity.x = 0.0f;
             }
+#endif
 
             // keep rotation within range
             if (playerTransform.Rotation >= 360.0f)
@@ -391,22 +394,35 @@ namespace GD
         // TODO : these limit literals will be extracted later into private fields for better access
         playerTransform.Position += playerRigidBody.Velocity * ts.GetSeconds();
 
+        if (Input::IsKeyPressed(HZ_KEY_B))
+        {
+            HZ_ASSERT(false);
+        }
+
+        // do not let the player go outside of its designated area
+        if (playerTransform.Position.y < -2.0f || playerTransform.Position.y > 50.0f)
+        {
+            playerProps.Alive = false;
+        }
 
         // always do game logic update before this
         playerProps.OnTheGround = false; // default
         // reset its position if a collision is detected
 
+        const auto& cameraPos = m_ECS->GetSystem<GDCameraSystem>()->GetCamera().GetPosition();
         for (Entity e : m_Entities)
         {
             auto& objectProps = m_ECS->GetComponent<GDObject>(e);
             auto& objectTransform = m_ECS->GetComponent<Transform>(e);
+
             if (objectProps.ObjectType == GDObjectType::Background)
             {
                 objectTransform.Position += glm::vec3{
-                    playerRigidBody.Velocity.x * ts / 1.1f,
+                    playerRigidBody.Velocity.x * ts / 1.08f,
                     0.0f,
                     0.0f
                 };
+                objectTransform.Position.y = cameraPos.y / 1.08f;
                 continue;
             }
 

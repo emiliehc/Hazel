@@ -60,7 +60,7 @@ namespace GD
         }
 
         // squares
-        for (int i = 0; i < 50; i += 2)
+        for (int i = 0; i < 500; i += 2)
         {
             CreateSquare(m_ECS, {7.0f + i * 2.5f, 1.0f + i * 0.5f, 0.0f});
         }
