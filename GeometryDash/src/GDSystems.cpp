@@ -215,7 +215,7 @@ namespace GD
             m_CameraPosition.y = playerPos.y + bottom;
         }
         m_CameraPosition.y = std::max(m_CameraPosition.y, 2.87166715f);
-        
+
         m_Camera.SetPosition(m_CameraPosition);
 
         m_CameraTranslationSpeed = m_ZoomLevel;
@@ -396,7 +396,7 @@ namespace GD
 
         if (Input::IsKeyPressed(HZ_KEY_B))
         {
-            HZ_ASSERT(false);
+            HZ_ASSERT(false, "");
         }
 
         // do not let the player go outside of its designated area
@@ -429,13 +429,18 @@ namespace GD
             // TODO : support rotation
             // TODO : support trangular slope
 
-            // check if it is in range, if not, don't bother with it
-            if (playerTransform.Position.x + playerTransform.Size.x / 2 < objectTransform.Position.x - objectTransform
-                                                                                                       .Size.x / 2 ||
-                playerTransform.Position.x - playerTransform.Size.x / 2 > objectTransform.Position.x + objectTransform
-                                                                                                       .Size.x / 2)
+            // check if it is in range, if not, don't bother with it, except for triggers
+            if (objectProps.ObjectType != GDObjectType::Trigger)
             {
-                continue;
+                if (playerTransform.Position.x + playerTransform.Size.x / 2 < objectTransform.Position.x -
+                    objectTransform
+                    .Size.x / 2 ||
+                    playerTransform.Position.x - playerTransform.Size.x / 2 > objectTransform.Position.x +
+                    objectTransform
+                    .Size.x / 2)
+                {
+                    continue;
+                }
             }
 
             switch (objectProps.ObjectType)
@@ -544,6 +549,61 @@ namespace GD
 
                 break;
             }
+            case GDObjectType::Trigger:
+            {
+                const auto& triggerObjectProps = objectTransform;
+                auto& triggerProps = m_ECS->GetComponent<GDTrigger>(e);
+                if (triggerProps.Cycle == GDTriggerCycle::Triggered)
+                {
+                    triggerProps.ElapsedTime += ts;
+                    if (triggerProps.ElapsedTime > triggerProps.Duration)
+                    {
+                        // reset trigger
+                        triggerProps.ElapsedTime = 0.0f;
+                        triggerProps.Cycle = GDTriggerCycle::Ready;
+                        break;
+                    }
+
+                    switch (triggerProps.Type)
+                    {
+                    case GDTriggerType::Move:
+                    {
+                        const auto& moveTriggerProps = triggerProps.MoveTriggerProps;
+                        for (const Entity object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
+                        {
+                            auto& affectedObjectTransform = m_ECS->GetComponent<Transform>(object);
+                            affectedObjectTransform.Position += moveTriggerProps.DeltaPosition / triggerProps.Duration * (float)ts;
+                        }
+
+                        break;
+                    }
+                    case GDTriggerType::Color:
+                    {
+                        const auto& colorTriggerProps = triggerProps.ColorTriggerProps;
+                        for (const auto object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
+                        {
+                        }
+
+                        break;
+                    }
+                    default:
+                    {
+                        HZ_ASSERT(false, "Unsupported trigger type!");
+                    }
+                    }
+                }
+                else
+                {
+                    // calc dx for triggers that are ready
+                    float dx = playerTransform.Position.x - triggerObjectProps.Position.x;
+                    if (dx >= 0.0f && dx < 0.4f)
+                    {
+                        triggerProps.Cycle = GDTriggerCycle::Triggered;
+                    }
+                }
+
+                break;
+            }
             default:
             {
                 HZ_ASSERT(false, "Unsupported object type!");
@@ -564,10 +624,18 @@ namespace GD
         {
             m_Entities.erase(e);
         }
+        else
+        {
+            m_GroupIDToEntitiesMap[m_ECS->GetComponent<GDObject>(e).GroupID].insert(e);
+        }
     }
 
     void GDGameLogicSystem::OnEntityRemoved(Entity e)
     {
+        if (m_ECS->HasComponent<GDObject>(e))
+        {
+            m_GroupIDToEntitiesMap[m_ECS->GetComponent<GDObject>(e).GroupID].erase(e);
+        }
     }
 
     void GDGameLogicSystem::SetAccentColor(const glm::vec4& accentColor)

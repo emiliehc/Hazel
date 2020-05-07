@@ -23,30 +23,30 @@ namespace GD
         return player;
     }
 
-    inline Entity CreateSquare(ECS& ecs, const glm::vec3& position)
+    inline Entity CreateSquare(ECS& ecs, const glm::vec3& position, unsigned groupID)
     {
         auto textureSquare = GDAssetManager::GetTexture("default-square.png");
         Entity square = ecs.CreateQuad(position, {1.0f, 1.0f}, textureSquare);
         ecs.RemoveComponent<Colored>(square);
-        ecs.AddComponent<GDObject>(square, {GDObjectType::Square, false});
+        ecs.AddComponent<GDObject>(square, {GDObjectType::Square, false, true, groupID});
         return square;
     }
 
-    inline Entity CreateTriangle(ECS& ecs, const glm::vec3& position)
+    inline Entity CreateTriangle(ECS& ecs, const glm::vec3& position, unsigned groupID)
     {
         auto textureTriangle = GDAssetManager::GetTexture("default-triangle.png");
         Entity triangle = ecs.CreateQuad(position, {1.0f, 1.0f}, textureTriangle);
         ecs.RemoveComponent<Colored>(triangle);
-        ecs.AddComponent<GDObject>(triangle, {GDObjectType::Triangle, true});
+        ecs.AddComponent<GDObject>(triangle, {GDObjectType::Triangle, true, true, groupID});
         return triangle;
     }
 
-    inline Entity CreateGround(ECS& ecs, const glm::vec3 position)
+    inline Entity CreateGround(ECS& ecs, const glm::vec3 position, unsigned groupID = 1)
     {
         auto textureGround = GDAssetManager::GetTexture("default-ground.png");
         Entity ground = ecs.CreateQuad(position, {5.0f, 10.0f}, glm::vec4(1.0f));
         ecs.RemoveComponent<Colored>(ground);
-        ecs.AddComponent<GDObject>(ground, {GDObjectType::Ground, false});
+        ecs.AddComponent<GDObject>(ground, {GDObjectType::Ground, false, true, groupID});
         ecs.AddComponent<Textured>(ground, {textureGround, 1.0f});
         return ground;
     }
@@ -57,7 +57,39 @@ namespace GD
         Entity background = ecs.CreateQuad(position, {20.0f, 20.0f}, glm::vec4(1.0f));
         ecs.RemoveComponent<Colored>(background);
         ecs.AddComponent<Textured>(background, {textureBackground, 1.0f});
-        ecs.AddComponent<GDObject>(background, {GDObjectType::Background, false});
+        ecs.AddComponent<GDObject>(background, {GDObjectType::Background, false, true, 0});
         return background;
+    }
+
+    inline Entity CreateMoveTrigger(ECS& ecs, const glm::vec3& position, unsigned groupID, float dt,
+                                    const glm::vec3& ds)
+    {
+        Entity moveTrigger = ecs.CreateEntity();
+        ecs.AddComponent<Transform>(moveTrigger, {position, {0.0f, 0.0f}, 0.0f});
+        ecs.AddComponent<GDObject>(moveTrigger, {GDObjectType::Trigger, false, false});
+        GDTrigger triggerProps = {GDTriggerType::Move, GDTriggerCycle::Ready, groupID, dt};
+        triggerProps.MoveTriggerProps = {ds};
+        static_assert(
+            offsetof(decltype(triggerProps.MoveTriggerProps.DeltaPosition), x) ==
+            offsetof(decltype(triggerProps.MoveTriggerProps), Dx)
+        );
+        ecs.AddComponent<GDTrigger>(moveTrigger, triggerProps);
+        return moveTrigger;
+    }
+
+    inline Entity CreateColorTrigger(ECS& ecs, const glm::vec3& position, unsigned groupID, float dt,
+                                     const glm::vec4& targetColor)
+    {
+        Entity colorTrigger = ecs.CreateEntity();
+        ecs.AddComponent<Transform>(colorTrigger, {position, {0.0f, 0.0f}, 0.0f});
+        ecs.AddComponent<GDObject>(colorTrigger, {GDObjectType::Trigger, false, false});
+        GDTrigger triggerProps = {GDTriggerType::Color, GDTriggerCycle::Ready, groupID, dt};
+        triggerProps.ColorTriggerProps = {targetColor};
+        static_assert(
+            offsetof(decltype(triggerProps.ColorTriggerProps.TargetColor), r) ==
+            offsetof(decltype(triggerProps.ColorTriggerProps), R)
+        );
+        ecs.AddComponent<GDTrigger>(colorTrigger, triggerProps);
+        return colorTrigger;
     }
 }

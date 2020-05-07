@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <map>
+
 #include "Hazel/ECS/Components.h"
 #include "Hazel/ECS/Systems.h"
 #include "Hazel/Renderer/OrthographicCamera.h"
@@ -126,5 +128,6 @@ namespace GD
         Entity m_Player;
         glm::vec4 m_AccentColor = {0.0f, 0.3176470588f, 1.0f, 1.0f};
         // the accent color will be used if no custom color is specified
+        std::map<unsigned, std::set<Entity>> m_GroupIDToEntitiesMap;
     };
 }

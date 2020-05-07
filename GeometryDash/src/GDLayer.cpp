@@ -28,15 +28,9 @@ namespace GD
         // register additional components
         m_ECS.RegisterComponent<GDPlayer>();
         m_ECS.RegisterComponent<GDObject>();
+        m_ECS.RegisterComponent<GDTrigger>();
 
         // register additional systems
-        auto rendererSys = m_ECS.RegisterSystem<GDRendererSystem>();
-        {
-            Signature signature;
-            signature.set(m_ECS.GetComponentType<Transform>());
-            signature.set(m_ECS.GetComponentType<Drawable>());
-            m_ECS.SetSystemSignature<GDRendererSystem>(signature);
-        }
         auto gameLogicSys = m_ECS.RegisterSystem<GDGameLogicSystem>();
         {
             Signature signature;
@@ -45,6 +39,13 @@ namespace GD
             m_ECS.SetSystemSignature<GDGameLogicSystem>(signature);
         }
         auto camSys = m_ECS.RegisterSystem<GDCameraSystem>();
+        auto rendererSys = m_ECS.RegisterSystem<GDRendererSystem>();
+        {
+            Signature signature;
+            signature.set(m_ECS.GetComponentType<Transform>());
+            signature.set(m_ECS.GetComponentType<Drawable>());
+            m_ECS.SetSystemSignature<GDRendererSystem>(signature);
+        }
 
         // create entities
         // create background
@@ -62,15 +63,18 @@ namespace GD
         // squares
         for (int i = 0; i < 500; i += 2)
         {
-            CreateSquare(m_ECS, {7.0f + i * 2.5f, 1.0f + i * 0.5f, 0.0f});
+            CreateSquare(m_ECS, {7.0f + i * 2.5f, 1.0f + i * 0.5f, 0.0f}, 2);
         }
 
         // spikes
         for (int i = 0; i < 3; i++)
         {
-            CreateTriangle(m_ECS, {20.0f + i, 0.5f, 0.0f});
+            CreateTriangle(m_ECS, {20.0f + i, 0.5f, 0.0f}, 3);
         }
 
+        // trigger
+        CreateMoveTrigger(m_ECS, {5.0f, 0.0f, 0.0f}, 3, 0.2f, {0.0f, 2.0f, 0.0f});
+        
         // create player
         Entity player = CreatePlayer(m_ECS);
         gameLogicSys->SetPlayer(player);
