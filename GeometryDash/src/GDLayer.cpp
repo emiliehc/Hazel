@@ -74,7 +74,10 @@ namespace GD
 
         // trigger
         CreateMoveTrigger(m_ECS, {5.0f, 0.0f, 0.0f}, 3, 0.2f, {0.0f, 2.0f, 0.0f});
-        
+        CreateAccentColorTrigger(m_ECS, {6.0f, 0.0f, 0.0f}, 1.0f, {0.9f, 0.2f, 0.1f, 1.0f});
+        CreateAccentColorTrigger(m_ECS, {30.0f, 0.0f, 0.0f}, 1.0f, {0.0f, 0.0f, 0.0f, 1.0f});
+        CreateAccentColorTrigger(m_ECS, {60.0f, 0.0f, 0.0f}, 1.0f, {0.9f, 0.2f, 0.1f, 1.0f});
+
         // create player
         Entity player = CreatePlayer(m_ECS);
         gameLogicSys->SetPlayer(player);

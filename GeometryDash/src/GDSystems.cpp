@@ -561,6 +561,32 @@ namespace GD
                         // reset trigger
                         triggerProps.ElapsedTime = 0.0f;
                         triggerProps.Cycle = GDTriggerCycle::Ready;
+                        switch (triggerProps.Type)
+                        {
+                        case GDTriggerType::Color:
+                        {
+                            const auto& colorTriggerProps = triggerProps.ColorTriggerProps;
+                            if (colorTriggerProps.AffectsAccentColor)
+                            {
+                                SetAccentColor(colorTriggerProps.TargetColor);
+                            }
+                            else
+                            {
+                                for (const Entity object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
+                                {
+                                    if (m_ECS->HasComponent<Colored>(object))
+                                    {
+                                        m_ECS->GetComponent<Colored>(object).Color = colorTriggerProps.TargetColor;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                        }
                         break;
                     }
 
@@ -572,7 +598,8 @@ namespace GD
                         for (const Entity object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
                         {
                             auto& affectedObjectTransform = m_ECS->GetComponent<Transform>(object);
-                            affectedObjectTransform.Position += moveTriggerProps.DeltaPosition / triggerProps.Duration * (float)ts;
+                            affectedObjectTransform.Position += moveTriggerProps.DeltaPosition / triggerProps.Duration *
+                                (float)ts;
                         }
 
                         break;
@@ -580,8 +607,32 @@ namespace GD
                     case GDTriggerType::Color:
                     {
                         const auto& colorTriggerProps = triggerProps.ColorTriggerProps;
-                        for (const auto object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
+                        if (colorTriggerProps.AffectsAccentColor)
                         {
+                            //HZ_TRACE("----------------------------------------------------");
+                            glm::vec4 originalColor = colorTriggerProps.TargetColor - (colorTriggerProps.TargetColor -
+                                m_AccentColor) / (1.0f - triggerProps.ElapsedTime / triggerProps.Duration);
+                            //HZ_TRACE("Calculated original color: {0}, {1}, {2}, {3}", originalColor.r, originalColor.g, originalColor.b, originalColor.a);
+
+                            glm::vec4 difference = colorTriggerProps.TargetColor - originalColor;
+                            //HZ_TRACE("Diff: {0}, {1}, {2}, {3}", difference.r, difference.g, difference.b, difference.a);
+                            SetAccentColor(m_AccentColor + difference / triggerProps.Duration * (float)ts);
+                            //HZ_TRACE("Final: {0}, {1}, {2}, {3}", m_AccentColor.r, m_AccentColor.g, m_AccentColor.b, m_AccentColor.a);
+                            //HZ_TRACE("----------------------------------------------------");
+                        }
+                        else
+                        {
+                            for (const auto object : m_GroupIDToEntitiesMap[triggerProps.ObjectGroupID])
+                            {
+                                if (m_ECS->HasComponent<Colored>(object))
+                                {
+                                    auto& objectColor = m_ECS->GetComponent<Colored>(object).Color;
+                                    glm::vec4 originalColor = colorTriggerProps.TargetColor - (colorTriggerProps.
+                                        TargetColor - objectColor) / (1.0f - triggerProps.ElapsedTime / triggerProps.Duration);
+                                    glm::vec4 difference = colorTriggerProps.TargetColor - originalColor;
+                                    objectColor += difference / triggerProps.Duration * (float)ts;
+                                }
+                            }
                         }
 
                         break;

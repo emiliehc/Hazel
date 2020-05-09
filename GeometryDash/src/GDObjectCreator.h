@@ -84,7 +84,22 @@ namespace GD
         ecs.AddComponent<Transform>(colorTrigger, {position, {0.0f, 0.0f}, 0.0f});
         ecs.AddComponent<GDObject>(colorTrigger, {GDObjectType::Trigger, false, false});
         GDTrigger triggerProps = {GDTriggerType::Color, GDTriggerCycle::Ready, groupID, dt};
-        triggerProps.ColorTriggerProps = {targetColor};
+        triggerProps.ColorTriggerProps = {targetColor, false};
+        static_assert(
+            offsetof(decltype(triggerProps.ColorTriggerProps.TargetColor), r) ==
+            offsetof(decltype(triggerProps.ColorTriggerProps), R)
+        );
+        ecs.AddComponent<GDTrigger>(colorTrigger, triggerProps);
+        return colorTrigger;
+    }
+
+    inline Entity CreateAccentColorTrigger(ECS& ecs, const glm::vec3& position, float dt, const glm::vec4& targetColor)
+    {
+        Entity colorTrigger = ecs.CreateEntity();
+        ecs.AddComponent<Transform>(colorTrigger, {position, {0.0f, 0.0f}, 0.0f});
+        ecs.AddComponent<GDObject>(colorTrigger, {GDObjectType::Trigger, false, false});
+        GDTrigger triggerProps = {GDTriggerType::Color, GDTriggerCycle::Ready, 0, dt};
+        triggerProps.ColorTriggerProps = {targetColor, true};
         static_assert(
             offsetof(decltype(triggerProps.ColorTriggerProps.TargetColor), r) ==
             offsetof(decltype(triggerProps.ColorTriggerProps), R)

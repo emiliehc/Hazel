@@ -54,13 +54,16 @@ namespace GD
 
     enum class GDTriggerType : unsigned char
     {
-        Move = 0,
-        Color = 1
+        Invalid = 0,
+        Move = 1,
+        Color = 2
     };
 
-    enum class GDTriggerCycle : unsigned char {
-        Ready = 0,
-        Triggered = 1
+    enum class GDTriggerCycle : unsigned char
+    {
+        Invalid = 0,
+        Ready = 1,
+        Triggered = 2
     };
 
     struct GDTrigger
@@ -70,6 +73,17 @@ namespace GD
         unsigned int ObjectGroupID; // what objects does this trigger affect?
         float Duration;
         float ElapsedTime = 0.0f;
+
+        GDTrigger() : Type(GDTriggerType::Invalid), Cycle(GDTriggerCycle::Invalid), ObjectGroupID(0), Duration(0.0f)
+        {
+        }
+
+        GDTrigger(GDTriggerType type, GDTriggerCycle cycle, unsigned groupID, float duration) : Type(type),
+                                                                                                Cycle(cycle),
+                                                                                                ObjectGroupID(groupID),
+                                                                                                Duration(duration)
+        {
+        }
 
         union
         {
@@ -102,6 +116,8 @@ namespace GD
                         float A;
                     };
                 };
+
+                bool AffectsAccentColor = false;
             } ColorTriggerProps;
         };
     };
