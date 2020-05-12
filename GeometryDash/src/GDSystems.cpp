@@ -10,6 +10,7 @@
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/ECS/ECSCore.h"
+#include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Renderer/Renderer2D.h"
 
 namespace GD
@@ -242,6 +243,8 @@ namespace GD
     {
     }
 
+    static bool s_SpaceBarPressed = false;
+
     void GDGameLogicSystem::OnUpdate(Timestep ts)
     {
         // if the ts is too large, clamp it and slow down the update speed
@@ -299,7 +302,7 @@ namespace GD
         {
             if (Input::IsKeyPressed(HZ_KEY_SPACE) && playerProps.OnTheGround)
             {
-                playerRigidBody.Velocity.y = 30.0f;
+                playerRigidBody.Velocity.y = 27.0f;
             }
 
 #if defined(HZ_DEBUG) || defined(HZ_RELEASE)
@@ -389,8 +392,8 @@ namespace GD
         playerRigidBody.Acceleration = playerGravity.Force / playerRigidBody.Mass;
         playerRigidBody.Velocity += playerRigidBody.Acceleration * ts.GetSeconds();
         // vertical velocity cap
-        playerRigidBody.Velocity.y = std::max(playerRigidBody.Velocity.y, -20.0f);
-        playerRigidBody.Velocity.y = std::min(playerRigidBody.Velocity.y, 25.0f);
+        playerRigidBody.Velocity.y = std::max(playerRigidBody.Velocity.y, -30.0f);
+        playerRigidBody.Velocity.y = std::min(playerRigidBody.Velocity.y, 50.0f);
         // TODO : these limit literals will be extracted later into private fields for better access
         playerTransform.Position += playerRigidBody.Velocity * ts.GetSeconds();
 
@@ -609,16 +612,10 @@ namespace GD
                         const auto& colorTriggerProps = triggerProps.ColorTriggerProps;
                         if (colorTriggerProps.AffectsAccentColor)
                         {
-                            //HZ_TRACE("----------------------------------------------------");
                             glm::vec4 originalColor = colorTriggerProps.TargetColor - (colorTriggerProps.TargetColor -
                                 m_AccentColor) / (1.0f - triggerProps.ElapsedTime / triggerProps.Duration);
-                            //HZ_TRACE("Calculated original color: {0}, {1}, {2}, {3}", originalColor.r, originalColor.g, originalColor.b, originalColor.a);
-
                             glm::vec4 difference = colorTriggerProps.TargetColor - originalColor;
-                            //HZ_TRACE("Diff: {0}, {1}, {2}, {3}", difference.r, difference.g, difference.b, difference.a);
                             SetAccentColor(m_AccentColor + difference / triggerProps.Duration * (float)ts);
-                            //HZ_TRACE("Final: {0}, {1}, {2}, {3}", m_AccentColor.r, m_AccentColor.g, m_AccentColor.b, m_AccentColor.a);
-                            //HZ_TRACE("----------------------------------------------------");
                         }
                         else
                         {
@@ -628,7 +625,8 @@ namespace GD
                                 {
                                     auto& objectColor = m_ECS->GetComponent<Colored>(object).Color;
                                     glm::vec4 originalColor = colorTriggerProps.TargetColor - (colorTriggerProps.
-                                        TargetColor - objectColor) / (1.0f - triggerProps.ElapsedTime / triggerProps.Duration);
+                                        TargetColor - objectColor) / (1.0f - triggerProps.ElapsedTime / triggerProps.
+                                        Duration);
                                     glm::vec4 difference = colorTriggerProps.TargetColor - originalColor;
                                     objectColor += difference / triggerProps.Duration * (float)ts;
                                 }
@@ -655,18 +653,61 @@ namespace GD
 
                 break;
             }
+            case GDObjectType::JumpRing:
+            {
+                const auto& jumpRingProps = m_ECS->GetComponent<GDJumpRingProps>(e);
+                float distance = glm::distance(
+                    glm::vec2{objectTransform.Position.x, objectTransform.Position.y},
+                    glm::vec2{playerTransform.Position.x, playerTransform.Position.y}
+                );
+                if (distance > objectTransform.Size.x / 2 + playerTransform.Size.x / 2)
+                {
+                    // not touching
+                    break;
+                }
+
+                switch (jumpRingProps.Type)
+                {
+                case GDJumpRingType::Yellow:
+                {
+                    if (s_SpaceBarPressed)
+                    {
+                        playerRigidBody.Velocity.y = playerRigidBody.Acceleration.y < 0 ? 35.0f : -35.0f;
+                    }
+                    
+                    break;
+                }
+                default:
+                {
+                    HZ_ASSERT(false, "Unsupported jump ring type!");
+                    break;
+                }
+                }
+                break;
+            }
             default:
             {
                 HZ_ASSERT(false, "Unsupported object type!");
             }
             }
         }
+        s_SpaceBarPressed = false;
     }
 
     void GDGameLogicSystem::OnEvent(Event& event)
     {
         // once a space bar event is received, it sends a signal to the on update functino via some kind of shared variable (for single threaded design only)
         // get key repeat count. if the repeat count is 1 or greater, ignore it, because that will be managed in the OnUpdate function
+        EventDispatcher dispatcher(event);
+        std::function<bool(KeyPressedEvent&)> callback = [](KeyPressedEvent& e) -> bool
+        {
+            if (e.GetKeyCode() == HZ_KEY_SPACE && e.GetRepeatCount() == 0)
+            {
+                s_SpaceBarPressed = true;
+            }
+            return false;
+        };
+        dispatcher.Dispatch<KeyPressedEvent>(callback);
     }
 
     void GDGameLogicSystem::OnEntityAdded(Entity e)

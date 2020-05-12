@@ -33,7 +33,8 @@ namespace GD
         Square = 2,
         Triangle = 3,
         Background = 4,
-        Trigger = 5
+        Trigger = 5,
+        JumpRing = 6
     };
 
     struct GDObject
@@ -120,5 +121,19 @@ namespace GD
                 bool AffectsAccentColor = false;
             } ColorTriggerProps;
         };
+    };
+
+    enum class GDJumpRingType : unsigned char
+    {
+        Yellow = 0,
+        Pink = 1,
+        Blue = 2,
+        Red = 3,
+        Green = 4
+    };
+
+    struct GDJumpRingProps
+    {
+        GDJumpRingType Type;
     };
 }

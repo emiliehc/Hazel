@@ -29,6 +29,7 @@ namespace GD
         m_ECS.RegisterComponent<GDPlayer>();
         m_ECS.RegisterComponent<GDObject>();
         m_ECS.RegisterComponent<GDTrigger>();
+        m_ECS.RegisterComponent<GDJumpRingProps>();
 
         // register additional systems
         auto gameLogicSys = m_ECS.RegisterSystem<GDGameLogicSystem>();
@@ -77,6 +78,9 @@ namespace GD
         CreateAccentColorTrigger(m_ECS, {6.0f, 0.0f, 0.0f}, 1.0f, {0.9f, 0.2f, 0.1f, 1.0f});
         CreateAccentColorTrigger(m_ECS, {30.0f, 0.0f, 0.0f}, 1.0f, {0.0f, 0.0f, 0.0f, 1.0f});
         CreateAccentColorTrigger(m_ECS, {60.0f, 0.0f, 0.0f}, 1.0f, {0.9f, 0.2f, 0.1f, 1.0f});
+
+        // orbs
+        CreateJumpRing(m_ECS, { 10.0f, 3.5f, 0.0f }, GDJumpRingType::Yellow);
 
         // create player
         Entity player = CreatePlayer(m_ECS);

@@ -23,6 +23,10 @@ namespace GD
         return player;
     }
 
+    //////////////////////////////////////////////////////////////////////
+    // Simple primitives
+    //////////////////////////////////////////////////////////////////////
+
     inline Entity CreateSquare(ECS& ecs, const glm::vec3& position, unsigned groupID)
     {
         auto textureSquare = GDAssetManager::GetTexture("default-square.png");
@@ -60,6 +64,10 @@ namespace GD
         ecs.AddComponent<GDObject>(background, {GDObjectType::Background, false, true, 0});
         return background;
     }
+
+    //////////////////////////////////////////////////////////////////////
+    // Triggers
+    //////////////////////////////////////////////////////////////////////
 
     inline Entity CreateMoveTrigger(ECS& ecs, const glm::vec3& position, unsigned groupID, float dt,
                                     const glm::vec3& ds)
@@ -106,5 +114,33 @@ namespace GD
         );
         ecs.AddComponent<GDTrigger>(colorTrigger, triggerProps);
         return colorTrigger;
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Jump rings
+    //////////////////////////////////////////////////////////////////////
+
+    inline Entity CreateJumpRing(ECS& ecs, const glm::vec3& position, GDJumpRingType type)
+    {
+        Entity jumpRing = ecs.CreateEntity();
+        ecs.AddComponent<Drawable>(jumpRing, {PrimitiveGeometryType::Quad});
+        ecs.AddComponent<GDObject>(jumpRing, {GDObjectType::JumpRing, false, true});
+        ecs.AddComponent<Transform>(jumpRing, {position, {1.5f, 1.5f}, 0.0f});
+        ecs.AddComponent<GDJumpRingProps>(jumpRing, {type});
+        ecs.AddComponent<Textured>(jumpRing, {GDAssetManager::GetTexture("default-ring.png"), 1.0f});
+        switch (type)
+        {
+        case GDJumpRingType::Yellow:
+        {
+            ecs.AddComponent<Colored>(jumpRing, {{1.0f, 1.0f, 0.0f, 1.0f}});
+            break;
+        }
+        default:
+        {
+            HZ_ASSERT(false, "Unsupported jump ring type!");
+            break;
+        }
+        }
+        return jumpRing;
     }
 }
