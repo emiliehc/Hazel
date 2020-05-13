@@ -27,8 +27,8 @@ namespace GD
         float d2 = sign(pt, v2, v3);
         float d3 = sign(pt, v3, v1);
 
-        bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-        bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+        bool has_neg = d1 < 0 || d2 < 0 || d3 < 0;
+        bool has_pos = d1 > 0 || d2 > 0 || d3 > 0;
 
         return !(has_neg && has_pos);
     }
@@ -333,13 +333,14 @@ namespace GD
             // jumping rotation
             if (!playerProps.OnTheGround)
             {
-                if (playerRigidBody.Velocity.x >= 0.0f)
+                if (playerRigidBody.Velocity.x >= 0.0f && playerRigidBody.Acceleration.y < 0.0f ||
+                   playerRigidBody.Velocity.y < 0.0f && playerRigidBody.Acceleration.y >= 0.0f)
                 {
-                    playerTransform.Rotation -= 360 * ts;
+                    playerTransform.Rotation -= 500 * ts;
                 }
                 else
                 {
-                    playerTransform.Rotation += 360 * ts;
+                    playerTransform.Rotation += 500 * ts;
                 }
             }
             else
@@ -451,7 +452,7 @@ namespace GD
             case GDObjectType::Square:
             {
                 // top
-                float playerBottomToObjectTop = (playerTransform.Position.y - playerTransform.Size.y / 2) - (
+                float playerBottomToObjectTop = playerTransform.Position.y - playerTransform.Size.y / 2 - (
                     objectTransform.Position.y + objectTransform.Size.y / 2);
                 if (playerBottomToObjectTop > playerTransform.Size.y / 10.0f)
                 {
@@ -470,7 +471,7 @@ namespace GD
                 }
 
                 // bottom
-                float objectBottomToPlayerTop = (objectTransform.Position.y - objectTransform.Size.y / 2) - (
+                float objectBottomToPlayerTop = objectTransform.Position.y - objectTransform.Size.y / 2 - (
                     playerTransform.Position.y + playerTransform.Size.y / 2);
                 if (objectBottomToPlayerTop >= 0.0f)
                 {
@@ -486,7 +487,7 @@ namespace GD
             case GDObjectType::Ground:
             {
                 // only check top
-                float playerBottomToObjectTop = (playerTransform.Position.y - playerTransform.Size.y / 2) - (
+                float playerBottomToObjectTop = playerTransform.Position.y - playerTransform.Size.y / 2 - (
                     objectTransform.Position.y + objectTransform.Size.y / 2);
                 if (playerBottomToObjectTop <= playerTransform.Size.y / 10.0f && playerBottomToObjectTop >= -
                     playerTransform.Size.y / 2.0f)
@@ -674,7 +675,7 @@ namespace GD
                     {
                         playerRigidBody.Velocity.y = playerRigidBody.Acceleration.y < 0 ? 35.0f : -35.0f;
                     }
-                    
+
                     break;
                 }
                 default:
